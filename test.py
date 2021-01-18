@@ -1,11 +1,13 @@
-import twint
-
+import twint  
+import pandas as pd
+df = pd.read_csv("VIS2020.csv")
+usn = list(set(df["username"]))
+#print(usn)
+#dic = {}
 c = twint.Config()
-#c.Username = "noneprivacy"
-c.Search = "#VIS2019"
-#c.Output = "VIS2019.csv"
-#c.Store_csv = True
-#c.Show_hashtags = True
-#c.Hide_output = True
-c.Limit = 20
-twint.run.Search(c)
+c.Username = usn[0]
+c.Format = "ID {id} | Followers {followers}|Username {username}"
+twint.run.Lookup(c)
+
+# df2  = pd.DataFrame({"Username":usn})
+# df2.to_csv("test3.csv")
