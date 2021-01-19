@@ -157,7 +157,8 @@ function draw_main() {
             
             let content = '<table><tr><td>Author</td><td>' + name + '</td></tr>'
                 + '<tr><td>Time</td><td>' + time + '</td></tr>'
-                + '<tr><td>Content</td><td>' + tweet + '</td><tr></table>';
+                + '<tr><td>Content</td><td>' + tweet + '</td><tr>'
+                + '<tr><td>Like</td><td>' + likes + '</td><tr></table>';
             
             let str = d[x_attr];
             
