@@ -120,17 +120,19 @@ function highlightTweet(id,usn,htgs){
     let z = d3.scaleLinear()
         .domain([2031,65000])
         .range([5,15])
-    chart3.selectAll("circle")
+    chart3.selectAll(".image")
         .transition()
         .duration(500)
         .style("opacity", 0.3)
-        .attr('r', (d, i) => z(parseInt(d["Followers"])) / 2)
-    chart3.selectAll("circle")
+        .attr('width', (d, i) => z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => z(parseInt(d["Followers"])))
+    chart3.selectAll(".image")
         .filter((d, i) => d["Username"] == usn)
         .transition()
         .duration(500)
         .style("opacity", 0.9)
-        .attr('r', (d, i) => z(parseInt(d["Followers"])) * 1.5)
+        .attr('width', (d, i) => z(parseInt(d["Followers"])) * 3)
+        .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
 }
 
 
@@ -161,11 +163,12 @@ function reset(){
     let z = d3.scaleLinear()
         .domain([2031,65000])
         .range([5,15])
-    chart3.selectAll('circle')
+    chart3.selectAll('.image')
         .transition()
         .duration(500)
         .style("opacity", 0.7)
-        .attr('r', (d, i) => z(parseInt(d["Followers"])))
+        .attr('width', (d, i) => 2 * z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => 2 * z(parseInt(d["Followers"])))
 }
 
 function selectTag(tag){
@@ -556,6 +559,24 @@ function draw_chart3(){
         .style("opacity", 0.7)
         .on('click', function(e, d){
             selectUser(d['Username'])
+        })
+        .on('mouseover', (e, d) => {
+            let name = d['Username']
+
+            let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
+
+            let str = d[x_attr];
+
+            let tooltip = d3.select('#tooltip1');
+            tooltip.html(content)
+                .style('left', e.x + 'px')
+                .style('top', e.y - 20 + 'px')
+                .style('visibility', 'visible');
+            // console.log('here')
+        })
+        .on('mouseout', (e, d) => {
+            let tooltip = d3.select('#tooltip1');
+            tooltip.style('visibility', 'hidden');
         })
 
 
