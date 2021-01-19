@@ -308,16 +308,28 @@ let chart3 = d3
 
 
 function draw_chart3(){
+    var num = 26
+    var xpos = []
+    for (var i = 0; i < num; i++) {
+		// 随机生成50个点坐标
+		var tmp = Math.floor(Math.random() * 1000);
+		xpos.push(tmp);
+    }
+    
+
     let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.1 * width }
     let x = d3.scaleLinear()
         .domain([54093518, 73058983])
         .range([padding.left, width - padding.right])
     let y = d3.scaleLinear()
-        .domain([2031,65000])
+        .domain([0, d3.max(xpos, function(d) {
+            return d;
+        })])
         .range([height - padding.bottom, padding.top])
     let z = d3.scaleLinear()
         .domain([2031,65000])
         .range([5,15])
+    console.log(y(xpos[1]))
     chart3.append('g')
         .selectAll('circle')
         .data(data)
@@ -328,7 +340,7 @@ function draw_chart3(){
             return x(parseInt(d["Time"]))
         })
         .style("opacity", 0.7)
-        .attr('cy', (d, i) => y(parseInt(d["Followers"])))
+        .attr('cy', (d, i) => y(xpos[i]))
         //.attr('r', 3)
         .attr('r', (d, i) => z(parseInt(d["Followers"])))
         .attr('fill', '#3488BC')
