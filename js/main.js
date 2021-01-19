@@ -83,8 +83,8 @@ function extract(data) {
 // calculate the x value of each hashtag, according to mean of twitters' x values
 // returned hashtags: [['hashtag1', sum1, x1, y1], ['hashtag2', sum2, x2, y2], ...]
 function cal_posi(hashtag) {
-    top_height = 50;
-    gap_y = 30;
+    top_height = height / 6
+    gap_y = height / 10
     max_tags_y = 5; // criteria 1: max num of tags permitted within the same height
     max_gap = 5; // criteria 2: |sum1-sum2| <= max_gap
     max_tags = 25; // max num of tags permiited in total
@@ -111,13 +111,14 @@ function cal_posi(hashtag) {
 
 function process_overlap(hashtag) {
     hashtag.sort(compareFunction2);
-    max_x = 150;
+    gapx = width / 8;
     for (h_curr in hashtag) {
         for (h in hashtag) {
             if (parseInt(h) >= parseInt(h_curr)) break;
-            while (hashtag[h][3] === hashtag[h_curr][3] && Math.abs(hashtag[h][2] - hashtag[h_curr][2]) <= max_x) {
-                hashtag[h_curr][2] -= max_x;
+            while (hashtag[h][3] === hashtag[h_curr][3] && Math.abs(hashtag[h][2] - hashtag[h_curr][2]) <= gapx) {
+                hashtag[h_curr][2] -= gapx;
             }
+            hashtag[h_curr][2] = Math.max(hashtag[h_curr][2], 10);
         }
     }
 }
@@ -136,12 +137,12 @@ function draw_hashtags(hashtags) {
         .attr("x", d => d[2])
         .attr("y", d => d[3])
         .attr("font-family", 'roboto')
-        .attr("font-size", d => 18 - (d[3]-50) / 30)
+        .attr("font-size", d => 18 - (d[3] - 50) / 30)
         .attr("stroke", '#CD5968')
         .attr("fill", '#CD5968')
         .attr("cursor", 'pointer')
-        // .attr("opacity", 1)
-        // .attr("font-weight", 'bold')
+    // .attr("opacity", 1)
+    // .attr("font-weight", 'bold')
 }
 
 let x_attr = 'created_at';
@@ -177,7 +178,7 @@ function get_x_min_max(data, attr) {
     return [min, max];
 }
 
-function calhot(d){
+function calhot(d) {
     let replies = parseInt(d['replies_count']);
     let retweets = parseInt(d['retweets_count']);
     let likes = parseInt(d['likes_count']);
@@ -383,8 +384,8 @@ d3.csv(data_file).then(function (DATA) {
     //draw_chart3();
 })
 
-d3.csv("../data/Follow.csv").then(function(DATA){
-    data = DATA.filter((d,i) => d["Time"] > 0);
+d3.csv("../data/Follow.csv").then(function (DATA) {
+    data = DATA.filter((d, i) => d["Time"] > 0);
     //console.log(data);
     draw_chart3();
 })
