@@ -330,7 +330,7 @@ function get_y_min_max(data) {
 }
 
 function draw_main() {
-    let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.1 * width };
+    let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.2 * width };
 
     chart2.append('g')
         .attr('transform', `translate(${padding.left + (width - padding.left - padding.right) / 2}, ${padding.top})`)
@@ -411,16 +411,16 @@ function draw_main() {
             let retweets = parseInt(d['retweets_count']);
             let likes = parseInt(d['likes_count']);
 
-            let content = '<table><tr><td>Author</td><td>' + name + '</td></tr>'
-                + '<tr><td>Time</td><td>' + time + '</td></tr>'
-                + '<tr><td>Content</td><td>' + tweet + '</td><tr></table>';
+            let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
+                + '<span style="font-size:0.3rem">' + time + '</span>'
+                + '<br>' + '<div style="font-size:0.6rem">' + tweet + '</div>';
 
             let str = d[x_attr];
 
             let tooltip = d3.select('#tooltip');
             tooltip.html(content)
-                .style('left', (x(get_time(str)) + 5) + 'px')
-                .style('top', (y(parseInt(Math.pow(replies + retweets + likes * 0.5, 1 / 4))) + 5) + 'px')
+                .style('left', (width * 0.83) + 'px')
+                .style('top', (y(0)+10) + 'px')
                 .style('visibility', 'visible');
             // console.log('here')
         })
