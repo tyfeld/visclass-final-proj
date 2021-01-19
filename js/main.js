@@ -23,12 +23,12 @@ d3.select("body")
 let chart1 = d3.select('#chart1')
     .append('svg')
     .attr('width', width)
-    .attr('height', height);
+    .attr('height', height)
 
 let chart2 = d3.select('#chart2')
     .append('svg')
     .attr('width', width)
-    .attr('height', height);
+    .attr('height', height)
 
 let chart3 = d3
     .select("#chart3")
@@ -38,7 +38,7 @@ let chart3 = d3
 
 let ttag = 'null'
 
-function highlightTag(tag){
+function highlightTag (tag) {
     chart1.selectAll("text")
         .transition()
         .duration(500)
@@ -54,13 +54,13 @@ function highlightTag(tag){
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) / 2);
+            return Math.sqrt(calhot(d) / 2)
         })
         .attr('opacity', 0.2)
     chart2.selectAll('circle')
-        .filter(function(d, i){
+        .filter(function (d, i) {
             ddd = d['hashtags']
-            for (dd in ddd){
+            for (dd in ddd) {
                 if (ddd[dd] == tag) return true
             }
             return false
@@ -68,23 +68,23 @@ function highlightTag(tag){
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) * 3);
+            return Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
 }
 
 
-function highlightTweet(id,usn,htgs){
+function highlightTweet (id, usn, htgs) {
     chart1.selectAll("text")
         .transition()
         .duration(500)
         .attr("font-size", d => 18 - (d[3] - 50) / 30)
         .attr('opacity', 0.3)
     chart1.selectAll("text")
-        .filter(function(d,i){
-            for (ht in htgs){
+        .filter(function (d, i) {
+            for (ht in htgs) {
                 //console.log(ht)
-                if (d[0] == htgs[ht]){
+                if (d[0] == htgs[ht]) {
                     console.log("yes")
                     return true
                 }
@@ -99,7 +99,7 @@ function highlightTweet(id,usn,htgs){
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) / 2);
+            return Math.sqrt(calhot(d) / 2)
         })
         .attr('opacity', 0.2)
     chart2.selectAll('circle')
@@ -114,12 +114,12 @@ function highlightTweet(id,usn,htgs){
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) * 3);
+            return Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
     let z = d3.scaleLinear()
-        .domain([2031,65000])
-        .range([5,15])
+        .domain([2031, 65000])
+        .range([5, 15])
     chart3.selectAll("circle")
         .transition()
         .duration(500)
@@ -134,18 +134,17 @@ function highlightTweet(id,usn,htgs){
 }
 
 
-function selectTweet(id,usn,htgs)
-{
+function selectTweet (id, usn, htgs) {
     reset()
-    if (id == iid){
+    if (id == iid) {
         iid = 0
     }
-    else{
-        highlightTweet(id,usn,htgs)
+    else {
+        highlightTweet(id, usn, htgs)
         iid = id
     }
 }
-function reset(){
+function reset () {
     chart1.selectAll("text")
         .transition()
         .duration(500)
@@ -155,12 +154,12 @@ function reset(){
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d));
+            return Math.sqrt(calhot(d))
         })
         .attr('opacity', 0.7)
     let z = d3.scaleLinear()
-        .domain([2031,65000])
-        .range([5,15])
+        .domain([2031, 65000])
+        .range([5, 15])
     chart3.selectAll('circle')
         .transition()
         .duration(500)
@@ -168,21 +167,21 @@ function reset(){
         .attr('r', (d, i) => z(parseInt(d["Followers"])))
 }
 
-function selectTag(tag){
+function selectTag (tag) {
     reset()
-    if (tag == ttag){
+    if (tag == ttag) {
         ttag = 'null'
     }
-    else{
+    else {
         highlightTag(tag)
         ttag = tag
     }
 }
 
-function highlightUser(user){
+function highlightUser (user) {
     let z = d3.scaleLinear()
-        .domain([2031,65000])
-        .range([5,15])
+        .domain([2031, 65000])
+        .range([5, 15])
     chart3.selectAll("circle")
         .transition()
         .duration(500)
@@ -198,147 +197,147 @@ function highlightUser(user){
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) / 2);
+            return Math.sqrt(calhot(d) / 2)
         })
         .attr('opacity', 0.2)
     chart2.selectAll('circle')
-        .filter(function(d, i){
+        .filter(function (d, i) {
             return d['username'] == user
         })
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) * 3);
+            return Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
 }
 
 let uuser = 'qpvnswruascbqjsx'
 
-function selectUser(user){
+function selectUser (user) {
     reset()
-    if (user == uuser){
+    if (user == uuser) {
         uuser = 'qpvnswruascbqjsx'
     }
-    else{
+    else {
         highlightUser(user)
         uuser = user
     }
 }
 
 // transform type of hashtags from string ro array of string
-function process(data) {
+function process (data) {
     for (var i = 0; i < data.length; ++i) {
-        data[i]['hashtags'] = data[i]['hashtags'].substring(1, data[i]['hashtags'].length - 1); //remove '[' and ']'
+        data[i]['hashtags'] = data[i]['hashtags'].substring(1, data[i]['hashtags'].length - 1) //remove '[' and ']'
         data[i]['hashtags'] = data[i]['hashtags'].split(', ') // split the string
         for (var j = 0; j < data[i]['hashtags'].length; ++j) {
-            data[i]['hashtags'][j] = data[i]['hashtags'][j].substring(1, data[i]['hashtags'][j].length - 1);
+            data[i]['hashtags'][j] = data[i]['hashtags'][j].substring(1, data[i]['hashtags'][j].length - 1)
         }
     }
 }
 
-function compareFunction(item1, item2) {
-    if (item1[1] < item2[1]) return 1;
-    else return -1;
+function compareFunction (item1, item2) {
+    if (item1[1] < item2[1]) return 1
+    else return -1
 }
 
 // from up to bottom, from right to left
-function compareFunction2(item1, item2) {
-    if (item1[3] > item2[3]) return 1;
-    else if (item1[3] < item2[3]) return -1;
+function compareFunction2 (item1, item2) {
+    if (item1[3] > item2[3]) return 1
+    else if (item1[3] < item2[3]) return -1
     else if (item1[3] === item2[3]) {
-        if (item1[2] < item2[2]) return 1;
-        else return -1;
+        if (item1[2] < item2[2]) return 1
+        else return -1
     }
 }
 
 // extract hashtags information from processed data and calcalute it's x value
 // returned hashtags: [['hashtag1', sum1, x1], ['hashtag2', sum2, x2], ...]
-function extract(data) {
-    filted = 'vis2020'; // the hashtag to be ignored
-    hashtags = [[filted, 0, 0]];
+function extract (data) {
+    filted = 'vis2020' // the hashtag to be ignored
+    hashtags = [[filted, 0, 0]]
     for (d in data) {
         // some auxiliary variables
         let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.1 * width }
         let x = d3.scaleLinear()
             .domain(get_x_min_max(data, x_attr))
-            .range([padding.left, width - padding.right]);
+            .range([padding.left, width - padding.right])
 
-        x_value = x(get_time(data[d][x_attr]));
-        tags = data[d]['hashtags'];
+        x_value = x(get_time(data[d][x_attr]))
+        tags = data[d]['hashtags']
         for (t in tags) {
-            tag = tags[t];
-            if (tag === filted) continue;
+            tag = tags[t]
+            if (tag === filted) continue
             for (var k = 0; k < hashtags.length; ++k) {
                 if (hashtags[k][0] === tag) {
-                    hashtags[k][1] += 1;
-                    hashtags[k][2] += x_value;
-                    break;
+                    hashtags[k][1] += 1
+                    hashtags[k][2] += x_value
+                    break
                 }
                 if (k === hashtags.length - 1) {
-                    var arr = [tag, 0, 0];
-                    hashtags.push(arr);
+                    var arr = [tag, 0, 0]
+                    hashtags.push(arr)
                 }
             }
         }
     }
     hashtags.splice(0, 1)
-    hashtags.sort(compareFunction); // sort according to sum value
-    return hashtags;
+    hashtags.sort(compareFunction) // sort according to sum value
+    return hashtags
 }
 
 // calculate the height value of each hashtag
 // calculate the x value of each hashtag, according to mean of twitters' x values
 // returned hashtags: [['hashtag1', sum1, x1, y1], ['hashtag2', sum2, x2, y2], ...]
-function cal_posi(hashtag) {
+function cal_posi (hashtag) {
     top_height = height / 6
     gap_y = height / 10
-    max_tags_y = 5; // criteria 1: max num of tags permitted within the same height
-    max_gap = 5; // criteria 2: |sum1-sum2| <= max_gap
-    max_tags = 25; // max num of tags permiited in total
-    hashtag.length = max_tags;
+    max_tags_y = 5 // criteria 1: max num of tags permitted within the same height
+    max_gap = 5 // criteria 2: |sum1-sum2| <= max_gap
+    max_tags = 25 // max num of tags permiited in total
+    hashtag.length = max_tags
 
-    cnter = 0;
-    curr_value = hashtag[0][1];
-    curr_height = top_height;
+    cnter = 0
+    curr_value = hashtag[0][1]
+    curr_height = top_height
 
     for (d in hashtag) {
         if (cnter < max_tags_y && curr_value - hashtag[d][1] <= max_gap) {
-            cnter += 1;
+            cnter += 1
         }
         else {
-            curr_height += gap_y;
-            curr_value = hashtag[d][1];
-            cnter = 1;
+            curr_height += gap_y
+            curr_value = hashtag[d][1]
+            cnter = 1
         }
 
-        hashtag[d].push(curr_height);
-        hashtag[d][2] = hashtag[d][2] / hashtag[d][1];
+        hashtag[d].push(curr_height)
+        hashtag[d][2] = hashtag[d][2] / hashtag[d][1]
     }
 }
 
-function process_overlap(hashtag) {
-    hashtag.sort(compareFunction2);
-    gapx = width / 9;
+function process_overlap (hashtag) {
+    hashtag.sort(compareFunction2)
+    gapx = width / 9
     for (h_curr in hashtag) {
         for (h in hashtag) {
-            if (parseInt(h) >= parseInt(h_curr)) break;
+            if (parseInt(h) >= parseInt(h_curr)) break
             while (hashtag[h][3] === hashtag[h_curr][3] && Math.abs(hashtag[h][2] - hashtag[h_curr][2]) <= gapx) {
-                hashtag[h_curr][2] -= gapx;
+                hashtag[h_curr][2] -= gapx
             }
-            hashtag[h_curr][2] = Math.max(hashtag[h_curr][2], 10);
+            hashtag[h_curr][2] = Math.max(hashtag[h_curr][2], 10)
         }
     }
 }
 
-function draw_hashtags(hashtags) {
+function draw_hashtags (hashtags) {
     //datahash = hashtags
     //console.log(datahash)
     let text = chart1.append("g")
         .selectAll("text")
         .data(hashtags)
         .join("text")
-        .text(d => ('🏷️'+d[0]))
+        .text(d => ('🏷️' + d[0]))
         .attr("x", d => d[2])
         .attr("y", d => d[3])
         .attr("font-family", 'roboto')
@@ -347,92 +346,92 @@ function draw_hashtags(hashtags) {
         .attr("fill", '#CD5968')
         .attr("cursor", 'pointer')
         .attr('opacity', 0.7)
-        .on('click', function(d, i){
+        .on('click', function (d, i) {
             selectTag(i[0])
         })
     // .attr("opacity", 1)
     // .attr("font-weight", 'bold')
 }
 
-let x_attr = 'created_at';
-let y_attr = 'hot';
+let x_attr = 'created_at'
+let y_attr = 'hot'
 
-function func(x) {
+function func (x) {
     x = 60000000 - (60000000 - x) / 2
     return x / 3 / 60000000 * x / 60000000 * x + 40000000
 }
 
-function get_time(str) {
+function get_time (str) {
     let time = ((((parseInt(str.slice(2, 4)) * 12 + parseInt(str.slice(5, 7))) * 31 + parseInt(str.slice(8, 10))) * 24 + parseInt(str.slice(11, 13))) * 60 +
         parseInt(str.slice(14, 16))) * 60 + parseInt(str.slice(17, 19)) - 600000000
     if (time < -100000000) return time
     if (time < 60000000) return func(time)
-    return time;
+    return time
 }
 
-function get_x_min_max(data, attr) {
-    let min = 1e9;
-    let max = 0;
+function get_x_min_max (data, attr) {
+    let min = 1e9
+    let max = 0
     data.forEach(d => {
-        let str = d[attr];
-        let v = get_time(str);
+        let str = d[attr]
+        let v = get_time(str)
         // console.log(v)
 
         if (v > max)
-            max = v;
+            max = v
         if (v < min)
-            min = v;
-    });
+            min = v
+    })
 
-    return [min, max];
+    return [min, max]
 }
 
-function calhot(d) {
-    let replies = parseInt(d['replies_count']);
-    let retweets = parseInt(d['retweets_count']);
-    let likes = parseInt(d['likes_count']);
-    return replies + retweets + likes * 0.3;
+function calhot (d) {
+    let replies = parseInt(d['replies_count'])
+    let retweets = parseInt(d['retweets_count'])
+    let likes = parseInt(d['likes_count'])
+    return replies + retweets + likes * 0.3
 }
 
-function get_y_min_max(data) {
-    let min = 1e9;
-    let max = 0;
+function get_y_min_max (data) {
+    let min = 1e9
+    let max = 0
     data.forEach(d => {
-        let v = calhot(d);
-        if (v > max) max = v;
-        if (v < min) min = v;
-    });
-    return [min, max];
+        let v = calhot(d)
+        if (v > max) max = v
+        if (v < min) min = v
+    })
+    return [min, max]
 }
 
-function draw_chart2() {
-    let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.2 * width };
+function draw_chart2 () {
+    let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.2 * width }
 
     chart2.append('g')
         .attr('transform', `translate(${padding.left + (width - padding.left - padding.right) / 2}, ${padding.top})`)
 
     let x = d3.scaleLinear()
         .domain(get_x_min_max(data, x_attr))
-        .range([padding.left, width - padding.right]);
+        .range([padding.left, width - padding.right])
     let axis_x = d3.axisBottom()
         .scale(x)
         .ticks(10)
-        .tickFormat(d => d);
+        .tickFormat(d => d)
 
     let y = d3.scaleLinear()
         .domain(get_y_min_max(data))
-        .range([height - padding.bottom, padding.top]);
+        .range([height - padding.bottom, padding.top])
     let axis_y = d3.axisLeft()
         .scale(y)
         .ticks(10)
-        .tickFormat(d => d);
+        .tickFormat(d => d)
 
     // x axis
     chart2.append('g')
         .attr('transform', `translate(${0}, ${height - padding.bottom})`)
         .call(axis_x)
         .attr('font-family', fontFamily)
-        .attr('font-size', '0.4rem');
+        .attr('font-size', '0.4rem')
 
     chart2.append('g')
         .attr('transform', `translate(${padding.left + (width - padding.left - padding.right) / 2}, ${height - padding.bottom})`)
@@ -440,14 +439,14 @@ function draw_chart2() {
         .attr('class', 'axis_label')
         .attr('dx', '-0.4rem')
         .attr('dy', 0.08 * height)
-        .text('time');
+        .text('time')
 
     // y axis
     chart2.append('g')
         .attr('transform', `translate(${padding.left}, ${0})`)
         .call(axis_y)
         .attr('font-family', fontFamily)
-        .attr('font-size', '0.4rem');
+        .attr('font-size', '0.4rem')
 
     chart2.append('g')
         .attr('transform', `translate(${padding.left}, ${height / 2})
@@ -464,157 +463,159 @@ function draw_chart2() {
         .enter().append('circle')
         .attr('class', 'point')
         .attr('cx', (d, i) => {
-            let str = d[x_attr];
+            let str = d[x_attr]
             // console.log(str)
             // console.log(get_time(str))
-            return x(get_time(str));
+            return x(get_time(str))
         })
         .attr('cy', (d, i) => {
             // console.log(hot)
-            return y(calhot(d));
+            return y(calhot(d))
         })
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d));
+            return Math.sqrt(calhot(d))
         })
         .style('fill', '#62A55E')
         .attr('opacity', 0.7)
-        .on('click', function(e, d){
-           // selectUser(d['Username'])
-           selectTweet(d['id'],d['username'],d['hashtags'])
-           ///console.log(d['id'],d['username'],d['hashtags'])
+        .on('click', function (e, d) {
+            // selectUser(d['Username'])
+            selectTweet(d['id'], d['username'], d['hashtags'])
+            ///console.log(d['id'],d['username'],d['hashtags'])
         })
         .on('mouseover', (e, d) => {
-            let tweet = d['tweet'];
-            let name = d['name'];
-            let time = d['created_at'];
+            let tweet = d['tweet']
+            let name = d['name']
+            let time = d['created_at']
 
-            let replies = parseInt(d['replies_count']);
-            let retweets = parseInt(d['retweets_count']);
-            let likes = parseInt(d['likes_count']);
+            let replies = parseInt(d['replies_count'])
+            let retweets = parseInt(d['retweets_count'])
+            let likes = parseInt(d['likes_count'])
 
             let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
                 + '<span style="font-size:0.3rem">' + time + '</span>'
                 + '<br>' + '<div style="font-size:0.6rem">' + tweet + '</div>'
-                +'<p align = "right" style="font-size:0.5rem">'+'👍 '+likes + '    💬 '+replies+'</p>';
+                + '<p align = "right" style="font-size:0.5rem">' + '👍 ' + likes + '    💬 ' + replies + '</p>'
 
-            let str = d[x_attr];
+            let str = d[x_attr]
 
-            let tooltip = d3.select('#tooltip');
+            let tooltip = d3.select('#tooltip')
             tooltip.html(content)
                 .style('left', (width * 0.83) + 'px')
-                .style('top', (y(0)+10) + 'px')
-                .style('visibility', 'visible');
+                .style('top', (y(0) + 10) + 'px')
+                .style('visibility', 'visible')
             // console.log('here')
         })
         .on('mouseout', (e, d) => {
-            let tooltip = d3.select('#tooltip');
-            tooltip.style('visibility', 'hidden');
+            let tooltip = d3.select('#tooltip')
+            tooltip.style('visibility', 'hidden')
         })
 }
 
 
-function draw_chart3(){
+function draw_chart3 () {
     var num = 26
     var xpos = []
     for (var i = 0; i < num; i++) {
-		// 随机生成50个点坐标
-		var tmp = Math.floor(Math.random() * 1000);
-		xpos.push(tmp);
+        // 随机生成50个点坐标
+        var tmp = Math.floor(Math.random() * 1000)
+        xpos.push(tmp)
     }
-    
+
 
     let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.1 * width }
     let x = d3.scaleLinear()
         .domain([54093518, 73058983])
         .range([padding.left, width - padding.right])
     let y = d3.scaleLinear()
-        .domain([0, d3.max(xpos, function(d) {
-            return d;
+        .domain([0, d3.max(xpos, function (d) {
+            return d
         })])
         .range([height - padding.bottom, padding.top])
     let z = d3.scaleLinear()
-        .domain([2031,65000])
-        .range([5,15])
+        .domain([2031, 65000])
+        .range([15, 30])
     var size = 50
-    var defs = chart3.append('svg:defs');
+    var defs = chart3.append('svg:defs')
     defs.append("svg:pattern")
-    .attr("id", "grump_avatar")
-    .attr("width", size)
-    .attr("height", size)
-    .attr("patternUnits", "userSpaceOnUse")
-    .attr("preserveAspectRatio","none") 
-    .append("svg:image")
-    .attr("xlink:href", "../data/computersociety.jpg")
-    .attr("width", size)
-    .attr("height", size)
-    .attr("x", -size/3)
-    .attr("y", -4);
+        .attr("id", "grump_avatar")
+        .attr("width", size)
+        .attr("height", size)
+        .attr("patternUnits", "userSpaceOnUse")
+        .attr("preserveAspectRatio", "none")
+        .append("svg:image")
+        .attr("xlink:href", "../data/computersociety.jpg")
+        .attr("width", size)
+        .attr("height", size)
+        .attr("x", -size / 3)
+        .attr("y", -4)
 
 
-    chart3.append('g')
-        .selectAll('circle')
-        .data(data)
-        .enter().append('circle')
-        .attr('class', 'point')
-        .attr('cx', (d, i) => {
-            //console.log('data', d); 
-            return x(parseInt(d["Time"]))
-        })
-        .style("opacity", 0.7)
-        .attr('cy', (d, i) => y(xpos[i]))
-        //.attr('r', 3)
-        .attr('r', (d, i) => z(parseInt(d["Followers"])))
-        .attr('fill', '#3488BC')
-        //.attr('fill',url('./data/computersociety.jpg'))
-        // .style("fill", (d,i) => {
-        //     if (d["Username"] == "computersociety")
-        //     return "url(#grump_avatar)"
-        // }
-        .on('click', function(e, d){
-            selectUser(d['Username'])
-        })
-        .on('mouseover', (e, d) => {
-            console.log(d["Username"])
-            // // show a tooltip
-            // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
-            // let institution = d['Institution']
-            // let grad_year = d['Ph.D. Graduation Year']
-            // let grad_school = d['Ph.D. Graduate School']
-            // let pubs = d['Publications']
-            // let hin = d[z_attr]
-            // let intes = d["Research Interest"]
-            // let content = name + ', ' + institution + '<br>' + 'Graduated in ' + grad_school + ' at '
-            //     + grad_year + '<br>Research Interest: ' + intes + '<br>Publications: ' + pubs + '<br>'
-            //     + 'H-index: ' + hin
-            // // tooltip
-            // let tooltip = d3.select('#tooltip')
-            // tooltip.html(content)
-            //     .style('left', (x(parseInt(d[x_attr])) + 15) + 'px')
-            //     .style('top', (y(parseInt(d[y_attr])) + 5) + 'px')
-            //     .style('visibility', 'visible')
-            //.transition().duration(500)
+        chart3.append('g')
+            .selectAll('circle')
+            .data(data)
+            .enter().append('circle')
+            .attr('class', 'point')
+            .attr('cx', (d, i) => {
+                //console.log('data', d); 
+                return x(parseInt(d["Time"]))
+            })
+            .style("opacity", 0.7)
+            .attr('cy', (d, i) => y(xpos[i]))
+            //.attr('r', 3)
+            .attr('r', (d, i) => z(parseInt(d["Followers"])))
+            .attr('fill', '#3488BC')
+            //.attr('fill',url('./data/computersociety.jpg'))
+            // .style("fill", (d,i) => {
+            //     if (d["Username"] == "computersociety")
+            //     return "url(#grump_avatar)"
+            // }
+            .on('click', function(e, d){
+                selectUser(d['Username'])
+            })
+            .on('mouseover', (e, d) => {
+                console.log(d["Username"])
+                // // show a tooltip
+                // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
+                // let institution = d['Institution']
+                // let grad_year = d['Ph.D. Graduation Year']
+                // let grad_school = d['Ph.D. Graduate School']
+                // let pubs = d['Publications']
+                // let hin = d[z_attr]
+                // let intes = d["Research Interest"]
+                // let content = name + ', ' + institution + '<br>' + 'Graduated in ' + grad_school + ' at '
+                //     + grad_year + '<br>Research Interest: ' + intes + '<br>Publications: ' + pubs + '<br>'
+                //     + 'H-index: ' + hin
+                // // tooltip
+                // let tooltip = d3.select('#tooltip')
+                // tooltip.html(content)
+                //     .style('left', (x(parseInt(d[x_attr])) + 15) + 'px')
+                //     .style('top', (y(parseInt(d[y_attr])) + 5) + 'px')
+                //     .style('visibility', 'visible')
+                //.transition().duration(500)
 
-            //fading
-            //fading(institution)
-            //console.log(d)
-            //console.log(padding.left)
-        })
+                //fading
+                //fading(institution)
+                //console.log(d)
+                //console.log(padding.left)
+            })
+
+
 }
 
 
 d3.csv(data_file).then(function (DATA) {
-    data = DATA.filter((d, i) => (get_time(d[x_attr]) > -100000000));
-    process(data);
-    hashtags = extract(data);
-    cal_posi(hashtags);
-    process_overlap(hashtags);
-    draw_hashtags(hashtags);
-    draw_chart2();
+    data = DATA.filter((d, i) => (get_time(d[x_attr]) > -100000000))
+    process(data)
+    hashtags = extract(data)
+    cal_posi(hashtags)
+    process_overlap(hashtags)
+    draw_hashtags(hashtags)
+    draw_chart2()
     //draw_chart3();
 })
 
 d3.csv("../data/Follow.csv").then(function (DATA) {
-    data = DATA.filter((d, i) => d["Time"] > 0);
+    data = DATA.filter((d, i) => d["Time"] > 0)
     //console.log(data);
-    draw_chart3();
+    draw_chart3()
 })
