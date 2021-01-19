@@ -17,13 +17,19 @@ let y_attr = 'hot';
 d3.select("body")
     .style("font-family", fontFamily)
 
+
+function get_time(str) {
+    let time = ((((parseInt(str.slice(2, 4)) * 12 + parseInt(str.slice(5, 7))) * 31 + parseInt(str.slice(8, 10))) * 24 + parseInt(str.slice(11, 13))) * 60 + 
+        parseInt(str.slice(14, 16))) * 60 + parseInt(str.slice(17, 19)) - 600000000;
+    return time;
+}
+
 function get_x_min_max(data, attr) {
     let min = 1e9;
     let max = 0;
     data.forEach(d => {
         let str = d[attr];
-        let v = parseInt(str.slice(5, 7) * Math.pow(10, 8)) + parseInt(str.slice(8, 10) * Math.pow(10, 6))
-                     + parseInt(str.slice(11, 13) * 10000) + parseInt(str.slice(14, 16) * 100) +parseInt(str.slice(17, 19));
+        let v = get_time(str);
         // console.log(v)
         
         if (v > max)
@@ -31,7 +37,6 @@ function get_x_min_max(data, attr) {
         if (v < min)
             min = v;
     });
-    console.log('attr', attr, 'min', min, 'max', max);
 
     return [min, max];
 }
@@ -47,18 +52,11 @@ function get_y_min_max(data) {
         if (v > max) max = v;
         if (v < min) min = v;
     });
-    console.log('min', min, 'max', max);
     return [min, max];
 }
 
-function get_time(str) {
-    let time = parseInt(str.slice(5, 7)) * Math.pow(10, 8) + parseInt(str.slice(8, 10)) * Math.pow(10, 6)
-                     + parseInt(str.slice(11, 13)) * 10000 + parseInt(str.slice(14, 16)) * 100 +parseInt(str.slice(17, 19));
-    return time;
-}
-
 function draw_main() {
-    let padding = { 'left': 0.3*width, 'bottom':0.35*height, 'top':0.35*height, 'right':0.1*width };
+    let padding = { 'left': 0.1*width, 'bottom':0.35*height, 'top':0.35*height, 'right':0.1*width };
     let svg = d3.select('#container')
         .select('svg')
         .attr('width', width)
@@ -121,6 +119,8 @@ function draw_main() {
         .attr('class', 'point')
         .attr('cx', (d, i) => {
             let str = d[x_attr];
+            console.log(str)
+            console.log(get_time(str))
             return x(get_time(str));
         })
         .attr('cy', (d, i) => {
@@ -131,7 +131,13 @@ function draw_main() {
             console.log(hot)
             return y((Math.pow(hot, 1/4)));
         })
-        .attr('r', '0.1rem')
+        .attr('r', (d, i) => {
+            let replies = parseInt(d['replies_count']);
+            let retweets = parseInt(d['retweets_count']);
+            let likes = parseInt(d['likes_count']);
+            let hot = replies + retweets + likes * 0.5;
+            return Math.sqrt(hot + 0.1);
+        })
         .style('fill', 'steelblue')
         .attr('opacity', 0.6)
         .on('mouseover', (e, d) => {
@@ -164,7 +170,7 @@ function draw_main() {
 
 
 d3.csv(data_file).then(function (DATA) {
-    data = DATA
+    data = DATA.filter((d, i) => (get_time(d[x_attr]) > -100000000));
     // remove data without x_attr or y_attr
     //data = data.filter((d, i) => (d[x_attr] != '' && d[y_attr] != '' && d[z_attr] != ''))
     //console.log(data)
