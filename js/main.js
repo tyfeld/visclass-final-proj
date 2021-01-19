@@ -8,7 +8,7 @@ let height = height0 / 3.2
 let fontFamily
 let data_file = '../data/VIS2020.csv'
 let ua = navigator.userAgent.toLowerCase()
-fontFamily = "Khand-Regular"
+fontFamily = "roboto"
 if (/\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)) {
     fontFamily = "PingFangSC-Regular"
 }
