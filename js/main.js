@@ -133,7 +133,7 @@ function draw_hashtags(hashtags) {
         .selectAll("text")
         .data(hashtags)
         .join("text")
-        .text(d => d[0])
+        .text(d => ('🏷️'+d[0]))
         .attr("x", d => d[2])
         .attr("y", d => d[3])
         .attr("font-family", 'roboto')
