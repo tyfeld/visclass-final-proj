@@ -54,7 +54,7 @@ html,body {
 }
 
 #tooltip1{
-    position: absolute;           
+    position: relative;           
     text-align: left;
     border-radius:5px;
     width: 18%;

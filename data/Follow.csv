@@ -1,27 +1,27 @@
-,Row,Username,Followers,Time,Index
-2,2,the_navc,12129,55329423,1
-11,11,gtcomputing,12919,73058983,2
-23,23,paulinestirlin3,4092,61164919,3
-29,29,islandsinnovate,10886,65876621,4
-30,30,iniscomm,2659,67457138,5
-32,32,dreams_abroad,3602,66654191,6
-35,35,angiepops11,2231,67413895,7
-46,46,aipcpandora,2770,54093518,8
-47,47,waittinstitute,3715,67537658,9
-50,50,vega_vis,2783,68968665,10
-52,52,cybunk,2046,70809966,11
-53,53,petchary,15400,67808679,12
-63,63,thinkuhi,14700,67083600,13
-65,65,ceevo95,3148,71327435,14
-67,67,estebanarasi,3649,67776922,15
-71,71,jellsmoor,65000,64829357,16
-76,76,rapidlasso,3456,58319980,17
-80,80,tamuvetmed,13800,55453600,18
-82,82,sesa_pr,4922,66921630,19
-83,83,economy_samreg,3334,71186430,20
-84,84,computersociety,58300,69321261,21
-86,86,scotgoveconomy,13300,67701280,22
-87,87,aosischair,3737,66872674,23
-88,88,nuhu_tamimia,2454,61706041,24
-96,96,uwdata,6601,68994350,25
-98,98,nersc,10900,69740103,26
+,Unnamed: 0,Row,Username,Followers,Time,Index,Name
+0,2,2,the_navc,12129,55329423,1,NAVC
+1,11,11,gtcomputing,12919,73058983,2,Georgia Tech Computing
+2,23,23,paulinestirlin3,4092,61164919,3,Pauline Stirling #TVTTagTeam
+3,29,29,islandsinnovate,10886,65876621,4,Island Innovation 🏝
+4,30,30,iniscomm,2659,67457138,5,Trish Hegarty
+5,32,32,dreams_abroad,3602,66654191,6,Dreams Abroad
+6,35,35,angiepops11,2231,67413895,7,Angelique Pouponneau
+7,46,46,aipcpandora,2770,54093518,8,AIPC Pandora
+8,47,47,waittinstitute,3715,67537658,9,Waitt Institute
+9,50,50,vega_vis,2783,68968665,10,Vega and Vega-Lite
+10,52,52,cybunk,2046,70809966,11,Samuel Huron
+11,53,53,petchary,15400,67808679,12,Emma Lewis
+12,63,63,thinkuhi,14700,67083600,13,University of the Highlands and Islands
+13,65,65,ceevo95,3148,71327435,14,CEEVO Val d'Oise
+14,67,67,estebanarasi,3649,67776922,15,Esteban #EscazuAhora
+15,71,71,jellsmoor,65000,64829357,16,James Ellsmoor 🏝
+16,76,76,rapidlasso,3456,58319980,17,martin isenburg
+17,80,80,tamuvetmed,13800,55453600,18,Texas A&M Vet Med
+18,82,82,sesa_pr,4922,66921630,19,SESA
+19,83,83,economy_samreg,3334,71186430,20,Минэкономразвития СО
+20,84,84,computersociety,58300,69321261,21,IEEE ComputerSociety
+21,86,86,scotgoveconomy,13300,67701280,22,Scot Gov Economy
+22,87,87,aosischair,3737,66872674,23,AOSIS
+23,88,88,nuhu_tamimia,2454,61706041,24,{God's Pleasure}
+24,96,96,uwdata,6601,68994350,25,Interactive Data Lab
+25,98,98,nersc,10900,69740103,26,NERSC
