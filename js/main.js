@@ -16,7 +16,139 @@ if (/\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)) {
 d3.select("body")
     .style("font-family", fontFamily)
 
+let chart1 = d3.select('#chart1')
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height);
 
+let chart2 = d3.select('#chart2')
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+let chart3 = d3
+    .select("#chart3")
+    .append("svg")
+    .attr('width', width)
+    .attr('height', height)
+
+let ttag = 'null'
+
+function highlightTag(tag){
+    chart1.selectAll("text")
+        .transition()
+        .duration(500)
+        .attr("font-size", d => 18 - (d[3] - 50) / 30)
+        .attr('opacity', 0.3)
+    chart1.selectAll("text")
+        .filter(d => d[0] == tag)
+        .transition()
+        .duration(500)
+        .attr("font-size", d => (18 - (d[3] - 50) / 30) * 1.5)
+        .attr('opacity', 0.9)
+    chart2.selectAll('circle')
+        .transition()
+        .duration(500)
+        .attr('r', (d, i) => {
+            return Math.sqrt(calhot(d) / 2);
+        })
+        .attr('opacity', 0.2)
+    chart2.selectAll('circle')
+        .filter(function(d, i){
+            ddd = d['hashtags']
+            for (dd in ddd){
+                if (ddd[dd] == tag) return true
+            }
+            return false
+        })
+        .transition()
+        .duration(500)
+        .attr('r', (d, i) => {
+            return Math.sqrt(calhot(d) * 3);
+        })
+        .attr('opacity', 0.9)
+}
+
+function reset(){
+    chart1.selectAll("text")
+        .transition()
+        .duration(500)
+        .attr("font-size", d => 18 - (d[3] - 50) / 30)
+        .attr('opacity', 0.7)
+    chart2.selectAll('circle')
+        .transition()
+        .duration(500)
+        .attr('r', (d, i) => {
+            return Math.sqrt(calhot(d));
+        })
+        .attr('opacity', 0.6)
+    let z = d3.scaleLinear()
+        .domain([2031,65000])
+        .range([5,15])
+    chart3.selectAll('circle')
+        .transition()
+        .duration(500)
+        .style("opacity", 0.7)
+        .attr('r', (d, i) => z(parseInt(d["Followers"])))
+}
+
+function selectTag(tag){
+    reset()
+    if (tag == ttag){
+        ttag = 'null'
+    }
+    else{
+        highlightTag(tag)
+        ttag = tag
+    }
+}
+
+function highlightUser(user){
+    let z = d3.scaleLinear()
+        .domain([2031,65000])
+        .range([5,15])
+    chart3.selectAll("circle")
+        .transition()
+        .duration(500)
+        .style("opacity", 0.3)
+        .attr('r', (d, i) => z(parseInt(d["Followers"])) / 2)
+    chart3.selectAll("circle")
+        .filter((d, i) => d["Username"] == user)
+        .transition()
+        .duration(500)
+        .style("opacity", 0.9)
+        .attr('r', (d, i) => z(parseInt(d["Followers"])) * 1.5)
+    chart2.selectAll('circle')
+        .transition()
+        .duration(500)
+        .attr('r', (d, i) => {
+            return Math.sqrt(calhot(d) / 2);
+        })
+        .attr('opacity', 0.2)
+    chart2.selectAll('circle')
+        .filter(function(d, i){
+            return d['username'] == user
+        })
+        .transition()
+        .duration(500)
+        .attr('r', (d, i) => {
+            return Math.sqrt(calhot(d) * 3);
+        })
+        .attr('opacity', 0.9)
+}
+
+let uuser = 'qpvnswruascbqjsx'
+
+function selectUser(user){
+    reset()
+    if (user == uuser){
+        ttag = 'qpvnswruascbqjsx'
+    }
+    else{
+        highlightUser(user)
+        uuser = user
+    }
+}
 
 // transform type of hashtags from string ro array of string
 function process(data) {
@@ -111,7 +243,7 @@ function cal_posi(hashtag) {
 
 function process_overlap(hashtag) {
     hashtag.sort(compareFunction2);
-    gapx = width / 8;
+    gapx = width / 9;
     for (h_curr in hashtag) {
         for (h in hashtag) {
             if (parseInt(h) >= parseInt(h_curr)) break;
@@ -124,10 +256,6 @@ function process_overlap(hashtag) {
 }
 
 function draw_hashtags(hashtags) {
-    let chart1 = d3.select('#chart1')
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height);
 
     let text = chart1.append("g")
         .selectAll("text")
@@ -141,6 +269,10 @@ function draw_hashtags(hashtags) {
         .attr("stroke", '#CD5968')
         .attr("fill", '#CD5968')
         .attr("cursor", 'pointer')
+        .attr('opacity', 0.7)
+        .on('click', function(d, i){
+            selectTag(i[0])
+        })
     // .attr("opacity", 1)
     // .attr("font-weight", 'bold')
 }
@@ -198,10 +330,6 @@ function get_y_min_max(data) {
 
 function draw_main() {
     let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.1 * width };
-    let chart2 = d3.select('#chart2')
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height);
 
     chart2.append('g')
         .attr('transform', `translate(${padding.left + (width - padding.left - padding.right) / 2}, ${padding.top})`)
@@ -301,12 +429,6 @@ function draw_main() {
         })
 }
 
-let chart3 = d3
-    .select("#chart3")
-    .append("svg")
-    .attr('width', width)
-    .attr('height', height)
-
 
 function draw_chart3(){
     var num = 26
@@ -345,6 +467,9 @@ function draw_chart3(){
         //.attr('r', 3)
         .attr('r', (d, i) => z(parseInt(d["Followers"])))
         .attr('fill', '#3488BC')
+        .on('click', function(e, d){
+            selectUser(d['Username'])
+        })
         .on('mouseover', (e, d) => {
             // // show a tooltip
             // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
