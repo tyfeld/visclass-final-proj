@@ -13,6 +13,9 @@ if (/\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)) {
     fontFamily = "PingFangSC-Regular"
 }
 
+let datahash = {}
+let iid = 0
+
 //fontFamily = "";
 d3.select("body")
     .style("font-family", fontFamily)
@@ -70,6 +73,78 @@ function highlightTag(tag){
         .attr('opacity', 0.9)
 }
 
+
+function highlightTweet(id,usn,htgs){
+    chart1.selectAll("text")
+        .transition()
+        .duration(500)
+        .attr("font-size", d => 18 - (d[3] - 50) / 30)
+        .attr('opacity', 0.3)
+    chart1.selectAll("text")
+        .filter(function(d,i){
+            for (ht in htgs){
+                //console.log(ht)
+                if (d[0] == htgs[ht]){
+                    console.log("yes")
+                    return true
+                }
+            }
+            return false
+        })
+        .transition()
+        .duration(500)
+        .attr("font-size", d => (18 - (d[3] - 50) / 30) * 1.5)
+        .attr('opacity', 0.9)
+    chart2.selectAll('circle')
+        .transition()
+        .duration(500)
+        .attr('r', (d, i) => {
+            return Math.sqrt(calhot(d) / 2);
+        })
+        .attr('opacity', 0.2)
+    chart2.selectAll('circle')
+        // .filter(function(d, i){
+        //     ddd = d['hashtags']
+        //     for (dd in ddd){
+        //         if (ddd[dd] == tag) return true
+        //     }
+        //     return false
+        // })
+        .filter(d => d['id'] == id)
+        .transition()
+        .duration(500)
+        .attr('r', (d, i) => {
+            return Math.sqrt(calhot(d) * 3);
+        })
+        .attr('opacity', 0.9)
+    let z = d3.scaleLinear()
+        .domain([2031,65000])
+        .range([5,15])
+    chart3.selectAll("circle")
+        .transition()
+        .duration(500)
+        .style("opacity", 0.3)
+        .attr('r', (d, i) => z(parseInt(d["Followers"])) / 2)
+    chart3.selectAll("circle")
+        .filter((d, i) => d["Username"] == usn)
+        .transition()
+        .duration(500)
+        .style("opacity", 0.9)
+        .attr('r', (d, i) => z(parseInt(d["Followers"])) * 1.5)
+}
+
+
+function selectTweet(id,usn,htgs)
+{
+    reset()
+    if (id == iid){
+        iid = 0
+    }
+    else{
+        highlightTweet(id,usn,htgs)
+        iid = id
+    }
+}
 function reset(){
     chart1.selectAll("text")
         .transition()
@@ -257,7 +332,8 @@ function process_overlap(hashtag) {
 }
 
 function draw_hashtags(hashtags) {
-
+    //datahash = hashtags
+    //console.log(datahash)
     let text = chart1.append("g")
         .selectAll("text")
         .data(hashtags)
@@ -402,6 +478,11 @@ function draw_chart2() {
         })
         .style('fill', '#62A55E')
         .attr('opacity', 0.7)
+        .on('click', function(e, d){
+           // selectUser(d['Username'])
+           selectTweet(d['id'],d['username'],d['hashtags'])
+           ///console.log(d['id'],d['username'],d['hashtags'])
+        })
         .on('mouseover', (e, d) => {
             let tweet = d['tweet'];
             let name = d['name'];
@@ -414,7 +495,7 @@ function draw_chart2() {
             let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
                 + '<span style="font-size:0.3rem">' + time + '</span>'
                 + '<br>' + '<div style="font-size:0.6rem">' + tweet + '</div>'
-                +'<p align = "right" style="font-size:0.6rem">'+'👍 '+likes + '    💬 '+replies+'</p>';
+                +'<p align = "right" style="font-size:0.5rem">'+'👍 '+likes + '    💬 '+replies+'</p>';
 
             let str = d[x_attr];
 
