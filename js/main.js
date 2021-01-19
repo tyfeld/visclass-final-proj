@@ -16,6 +16,11 @@ if (/\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)) {
 let datahash = {}
 let iid = 0
 
+let padding;
+let x;
+let x_t;
+let y;
+
 //fontFamily = "";
 d3.select("body")
     .style("font-family", fontFamily)
@@ -38,7 +43,7 @@ let chart3 = d3
 
 let ttag = 'null'
 
-function highlightTag (tag) {
+function highlightTag(tag) {
     chart1.selectAll("text")
         .transition()
         .duration(500)
@@ -74,7 +79,7 @@ function highlightTag (tag) {
 }
 
 
-function highlightTweet (id, usn, htgs) {
+function highlightTweet(id, usn, htgs) {
     chart1.selectAll("text")
         .transition()
         .duration(500)
@@ -118,8 +123,8 @@ function highlightTweet (id, usn, htgs) {
         })
         .attr('opacity', 0.9)
     let z = d3.scaleLinear()
-        .domain([2031,65000])
-        .range([15,25])
+        .domain([2031, 65000])
+        .range([15, 25])
     chart3.selectAll("image")
         //.transition()
         //.duration(500)
@@ -137,7 +142,7 @@ function highlightTweet (id, usn, htgs) {
 }
 
 
-function selectTweet (id, usn, htgs) {
+function selectTweet(id, usn, htgs) {
     reset()
     if (id == iid) {
         iid = 0
@@ -147,7 +152,7 @@ function selectTweet (id, usn, htgs) {
         iid = id
     }
 }
-function reset () {
+function reset() {
     chart1.selectAll("text")
         .transition()
         .duration(500)
@@ -161,8 +166,8 @@ function reset () {
         })
         .attr('opacity', 0.7)
     let z = d3.scaleLinear()
-        .domain([2031,65000])
-        .range([15,25])
+        .domain([2031, 65000])
+        .range([15, 25])
     chart3.selectAll('image')
         .transition()
         .duration(500)
@@ -171,7 +176,7 @@ function reset () {
         .attr('height', (d, i) => 2 * z(parseInt(d["Followers"])))
 }
 
-function selectTag (tag) {
+function selectTag(tag) {
     reset()
     if (tag == ttag) {
         ttag = 'null'
@@ -182,10 +187,10 @@ function selectTag (tag) {
     }
 }
 
-function highlightUser (user) {
+function highlightUser(user) {
     let z = d3.scaleLinear()
         .domain([2031, 65000])
-        .range([15,25])
+        .range([15, 25])
     chart3.selectAll("image")
         .transition()
         .duration(500)
@@ -220,7 +225,7 @@ function highlightUser (user) {
 
 let uuser = 'qpvnswruascbqjsx'
 
-function selectUser (user) {
+function selectUser(user) {
     reset()
     if (user == uuser) {
         uuser = 'qpvnswruascbqjsx'
@@ -232,7 +237,7 @@ function selectUser (user) {
 }
 
 // transform type of hashtags from string ro array of string
-function process (data) {
+function process(data) {
     for (var i = 0; i < data.length; ++i) {
         data[i]['hashtags'] = data[i]['hashtags'].substring(1, data[i]['hashtags'].length - 1) //remove '[' and ']'
         data[i]['hashtags'] = data[i]['hashtags'].split(', ') // split the string
@@ -242,13 +247,13 @@ function process (data) {
     }
 }
 
-function compareFunction (item1, item2) {
+function compareFunction(item1, item2) {
     if (item1[1] < item2[1]) return 1
     else return -1
 }
 
 // from up to bottom, from right to left
-function compareFunction2 (item1, item2) {
+function compareFunction2(item1, item2) {
     if (item1[3] > item2[3]) return 1
     else if (item1[3] < item2[3]) return -1
     else if (item1[3] === item2[3]) {
@@ -259,7 +264,7 @@ function compareFunction2 (item1, item2) {
 
 // extract hashtags information from processed data and calcalute it's x value
 // returned hashtags: [['hashtag1', sum1, x1], ['hashtag2', sum2, x2], ...]
-function extract (data) {
+function extract(data) {
     filted = 'vis2020' // the hashtag to be ignored
     hashtags = [[filted, 0, 0]]
     for (d in data) {
@@ -295,7 +300,7 @@ function extract (data) {
 // calculate the height value of each hashtag
 // calculate the x value of each hashtag, according to mean of twitters' x values
 // returned hashtags: [['hashtag1', sum1, x1, y1], ['hashtag2', sum2, x2, y2], ...]
-function cal_posi (hashtag) {
+function cal_posi(hashtag) {
     top_height = height / 6
     gap_y = height / 10
     max_tags_y = 5 // criteria 1: max num of tags permitted within the same height
@@ -322,7 +327,7 @@ function cal_posi (hashtag) {
     }
 }
 
-function process_overlap (hashtag) {
+function process_overlap(hashtag) {
     hashtag.sort(compareFunction2)
     gapx = width / 9
     for (h_curr in hashtag) {
@@ -336,7 +341,7 @@ function process_overlap (hashtag) {
     }
 }
 
-function draw_hashtags (hashtags) {
+function draw_hashtags(hashtags) {
     //datahash = hashtags
     //console.log(datahash)
     let text = chart1.append("g")
@@ -362,12 +367,12 @@ function draw_hashtags (hashtags) {
 let x_attr = 'created_at'
 let y_attr = 'hot'
 
-function func (x) {
+function func(x) {
     x = 60000000 - (60000000 - x) / 2
     return x / 3 / 60000000 * x / 60000000 * x + 40000000
 }
 
-function get_time (str) {
+function get_time(str) {
     let time = ((((parseInt(str.slice(2, 4)) * 12 + parseInt(str.slice(5, 7))) * 31 + parseInt(str.slice(8, 10))) * 24 + parseInt(str.slice(11, 13))) * 60 +
         parseInt(str.slice(14, 16))) * 60 + parseInt(str.slice(17, 19)) - 600000000
     if (time < -100000000) return time
@@ -375,7 +380,7 @@ function get_time (str) {
     return time
 }
 
-function get_x_min_max (data, attr) {
+function get_x_min_max(data, attr) {
     let min = 1e9
     let max = 0
     data.forEach(d => {
@@ -392,14 +397,14 @@ function get_x_min_max (data, attr) {
     return [min, max]
 }
 
-function calhot (d) {
+function calhot(d) {
     let replies = parseInt(d['replies_count'])
     let retweets = parseInt(d['retweets_count'])
     let likes = parseInt(d['likes_count'])
     return replies + retweets + likes * 0.3
 }
 
-function get_y_min_max (data) {
+function get_y_min_max(data) {
     let min = 1e9
     let max = 0
     data.forEach(d => {
@@ -410,21 +415,62 @@ function get_y_min_max (data) {
     return [min, max]
 }
 
-function draw_chart2 () {
-    let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.2 * width }
+function zoomed(event) {
+    x = event.transform.rescaleX(x_t);
+    update();
+}
+
+function update() {
+    let axis_x = d3.axisBottom()
+        .scale(x)
+        .ticks(10)
+        .tickFormat(d => d);
+
+    // x axis
+    chart2.select('.x_axis').remove();
+    chart2.append('g')
+        .attr('class', 'x_axis')
+        .attr('transform', `translate(${0}, ${height - padding.bottom})`)
+        .call(axis_x)
+        .attr('font-family', fontFamily)
+        .attr('font-size', '0.4rem')
+
+    // points
+    let points = chart2.selectAll('.point')
+        .data(data);
+
+    points.enter().append('circle')
+        .attr('class', 'point')
+        .merge(points)
+        .attr('cx', (d, i) => {
+            return x(get_time(d[x_attr]));
+        })
+        .attr('cy', (d, i) => y(calhot(d)))
+        .style('visibility', (d, i) => {
+            let x_p = x(get_time(d[x_attr]));
+            if (x_p < padding.left || x_p > (width - padding.right))
+                return 'hidden';
+            else return 'visible';
+        })
+    points.exit().remove();
+}
+
+function draw_chart2() {
+    padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.2 * width }
 
     chart2.append('g')
         .attr('transform', `translate(${padding.left + (width - padding.left - padding.right) / 2}, ${padding.top})`)
 
-    let x = d3.scaleLinear()
+    x_t = d3.scaleLinear()
         .domain(get_x_min_max(data, x_attr))
         .range([padding.left, width - padding.right])
+    x = x_t;
     let axis_x = d3.axisBottom()
         .scale(x)
         .ticks(10)
         .tickFormat(d => d)
 
-    let y = d3.scaleLinear()
+    y = d3.scaleLinear()
         .domain(get_y_min_max(data))
         .range([height - padding.bottom, padding.top])
     let axis_y = d3.axisLeft()
@@ -434,6 +480,7 @@ function draw_chart2 () {
 
     // x axis
     chart2.append('g')
+        .attr('class', 'x_axis')
         .attr('transform', `translate(${0}, ${height - padding.bottom})`)
         .call(axis_x)
         .attr('font-family', fontFamily)
@@ -515,10 +562,17 @@ function draw_chart2 () {
             let tooltip = d3.select('#tooltip')
             tooltip.style('visibility', 'hidden')
         })
+
+    let extent = [[padding.left, padding.top], [width - padding.right, height - padding.bottom]]
+    chart2.call(d3.zoom()
+        .scaleExtent([1, 7])
+        .translateExtent(extent)
+        .extent(extent)
+        .on('zoom', zoomed));
 }
 
 
-function draw_chart3 () {
+function draw_chart3() {
     var num = 26
     var xpos = []
     for (var i = 0; i < num; i++) {
@@ -538,36 +592,36 @@ function draw_chart3 () {
         })])
         .range([height - padding.bottom, padding.top])
     let z = d3.scaleLinear()
-        .domain([2031,65000])
-        .range([15,25])
+        .domain([2031, 65000])
+        .range([15, 25])
 
     var images = chart3.selectAll(".images")
         .data(data)
         .enter()
         .append("image")
 
-    images.attr("xlink:href", function(d){
-            return "../img/"+d["Username"]+".jpg"
-        })
+    images.attr("xlink:href", function (d) {
+        return "../img/" + d["Username"] + ".jpg"
+    })
         .attr('x', (d, i) => {
             //console.log('data', d); 
             return x(parseInt(d["Time"]))
         })
         //.style("opacity", 0.7)
         //.attr('y', (d, i) => y(xpos[i]))
-        .attr('y', function(d,i){
-            return y(xpos[parseInt(d["Index"])-1])
+        .attr('y', function (d, i) {
+            return y(xpos[parseInt(d["Index"]) - 1])
         })
         .attr("width", (d, i) => 2 * z(parseInt(d["Followers"])))
         .attr("height", (d, i) => 2 * z(parseInt(d["Followers"])))
         .style("opacity", 0.7)
-        .on('click', function(e, d){
+        .on('click', function (e, d) {
             selectUser(d['Username'])
         })
-         .on('mouseover', (e, d) => {
-             let name = d['Name']
+        .on('mouseover', (e, d) => {
+            let name = d['Name']
 
-             let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
+            let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
 
             //let str = d[x_attr];
 
@@ -575,9 +629,9 @@ function draw_chart3 () {
             tooltip.html(content)
                 .style('left', x(parseInt(d["Time"])) + 'px')
                 //.style('top',  y(xpos[parseInt(d["Index"])-1]) + 'px')
-                .style('top',  y(xpos[parseInt(d["Index"])-1]) -290 + 'px')
+                .style('top', y(xpos[parseInt(d["Index"]) - 1]) - 290 + 'px')
                 .style('visibility', 'visible');
-            console.log( y(xpos[parseInt(d["Index"])-1]))
+            console.log(y(xpos[parseInt(d["Index"]) - 1]))
         })
         .on('mouseout', (e, d) => {
             let tooltip = d3.select('#tooltip1');
@@ -613,40 +667,40 @@ function draw_chart3 () {
     //     .style("opacity", 0.7)
     //     .attr('cy', (d, i) => y(xpos[i]))
     //     .attr('r', (d, i) => z(parseInt(d["Followers"])))
-        // .attr('fill',url('./data/computersociety.jpg'))
-        // .style("fill", (d,i) => {
-        //     if (d["Username"] == "computersociety")
-        //     return "url(#grump_avatar)"
-        // })
-        // .on('click', function(e, d){
-        //     selectUser(d['Username'])
-        // })
-        // .on('mouseover', (e, d) => {
-        //     console.log(d["Username"])
-            // // show a tooltip
-            // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
-            // let institution = d['Institution']
-            // let grad_year = d['Ph.D. Graduation Year']
-            // let grad_school = d['Ph.D. Graduate School']
-            // let pubs = d['Publications']
-            // let hin = d[z_attr]
-            // let intes = d["Research Interest"]
-            // let content = name + ', ' + institution + '<br>' + 'Graduated in ' + grad_school + ' at '
-            //     + grad_year + '<br>Research Interest: ' + intes + '<br>Publications: ' + pubs + '<br>'
-            //     + 'H-index: ' + hin
-            // // tooltip
-            // let tooltip = d3.select('#tooltip')
-            // tooltip.html(content)
-            //     .style('left', (x(parseInt(d[x_attr])) + 15) + 'px')
-            //     .style('top', (y(parseInt(d[y_attr])) + 5) + 'px')
-            //     .style('visibility', 'visible')
-            //.transition().duration(500)
+    // .attr('fill',url('./data/computersociety.jpg'))
+    // .style("fill", (d,i) => {
+    //     if (d["Username"] == "computersociety")
+    //     return "url(#grump_avatar)"
+    // })
+    // .on('click', function(e, d){
+    //     selectUser(d['Username'])
+    // })
+    // .on('mouseover', (e, d) => {
+    //     console.log(d["Username"])
+    // // show a tooltip
+    // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
+    // let institution = d['Institution']
+    // let grad_year = d['Ph.D. Graduation Year']
+    // let grad_school = d['Ph.D. Graduate School']
+    // let pubs = d['Publications']
+    // let hin = d[z_attr]
+    // let intes = d["Research Interest"]
+    // let content = name + ', ' + institution + '<br>' + 'Graduated in ' + grad_school + ' at '
+    //     + grad_year + '<br>Research Interest: ' + intes + '<br>Publications: ' + pubs + '<br>'
+    //     + 'H-index: ' + hin
+    // // tooltip
+    // let tooltip = d3.select('#tooltip')
+    // tooltip.html(content)
+    //     .style('left', (x(parseInt(d[x_attr])) + 15) + 'px')
+    //     .style('top', (y(parseInt(d[y_attr])) + 5) + 'px')
+    //     .style('visibility', 'visible')
+    //.transition().duration(500)
 
-            //fading
-            //fading(institution)
-            //console.log(d)
-            //console.log(padding.left)
-        // })
+    //fading
+    //fading(institution)
+    //console.log(d)
+    //console.log(padding.left)
+    // })
 }
 
 
