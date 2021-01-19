@@ -4,7 +4,7 @@ let _height = $(window).height()
 let width0 = 0.98 * _width
 let height0 = 0.98 * _height
 let width = width0 / 1.1
-let height = height0 / 3.2
+let height = height0 / 3.3
 let fontFamily
 let data_file = '../data/VIS2020.csv'
 let ua = navigator.userAgent.toLowerCase()
@@ -20,9 +20,14 @@ let iid = 0
 d3.select("body")
     .style("font-family", fontFamily)
 
-let chart1 = d3.select('#chart1')
+let title = d3.select('#title')
     .append('svg')
     .attr('width', width)
+    .attr('height', height0 * 0.06)
+
+let chart1 = d3.select('#chart1')
+    .append('svg')
+    .attr('width', width0)
     .attr('height', height)
 
 let chart2 = d3.select('#chart2')
@@ -34,7 +39,7 @@ let chart3 = d3
     .select("#chart3")
     .append("svg")
     .attr('width', width)
-    .attr('height', height)
+    .attr('height', height + 40)
 
 let ttag = 'null'
 
@@ -264,7 +269,7 @@ function extract (data) {
     hashtags = [[filted, 0, 0]]
     for (d in data) {
         // some auxiliary variables
-        let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.1 * width }
+        let padding = { 'left': 0.2 * width, 'bottom': 0.05 * height, 'top': 0.1 * height, 'right': 0.1 * width }
         let x = d3.scaleLinear()
             .domain(get_x_min_max(data, x_attr))
             .range([padding.left, width - padding.right])
@@ -324,7 +329,7 @@ function cal_posi (hashtag) {
 
 function process_overlap (hashtag) {
     hashtag.sort(compareFunction2)
-    gapx = width / 9
+    gapx = width / 11
     for (h_curr in hashtag) {
         for (h in hashtag) {
             if (parseInt(h) >= parseInt(h_curr)) break
@@ -339,7 +344,7 @@ function process_overlap (hashtag) {
 function draw_hashtags (hashtags) {
     //datahash = hashtags
     //console.log(datahash)
-    let text = chart1.append("g")
+    chart1.append("g")
         .selectAll("text")
         .data(hashtags)
         .join("text")
@@ -355,8 +360,31 @@ function draw_hashtags (hashtags) {
         .on('click', function (d, i) {
             selectTag(i[0])
         })
+    title.append('g')
+        .attr('transform', `translate(${width / 2 - 100}, ${height / 10})`)
+        .append('text')
+        .attr("font-family", 'roboto')
+        .attr("font-size", d => 18)
+        .attr("stroke", '#CD5968')
+        .attr("fill", '#CD5968')
+        .text('A Visualization for twitters about the VIS2020');
     // .attr("opacity", 1)
     // .attr("font-weight", 'bold')
+    chart1.append('image')
+        .attr('xlink:href',"../data/icon.png")
+        .attr('x', width )
+        .attr('y', 10)
+        .attr('width', 150)
+        .attr('weight', 150)
+        // .selectAll('.images')
+        // .append('image')
+        // .attr("xlink:href", function(d){
+        //     return "../data/icon.png"
+        // })
+        // .attr('x', 0)
+        // .attr('y', 0)
+        // .attr('width', 100)
+        // .attr('weight', 100)
 }
 
 let x_attr = 'created_at'
@@ -411,10 +439,20 @@ function get_y_min_max (data) {
 }
 
 function draw_chart2 () {
-    let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.2 * width }
+    let padding = { 'left': 0.2 * width, 'bottom': 0.1 * height, 'top': 0.05 * height, 'right': 0.2 * width }
 
     chart2.append('g')
         .attr('transform', `translate(${padding.left + (width - padding.left - padding.right) / 2}, ${padding.top})`)
+
+    
+    chart2.append('g')
+        .attr('transform', `translate(${width * 0.0}, ${height * 0.8})`)
+        .append('text')
+        .attr("font-family", 'roboto')
+        .attr("font-size", d => 180)
+        .attr("stroke", '#CD5968')
+        .attr("fill", '#CD5968')
+        .text('💬')
 
     let x = d3.scaleLinear()
         .domain(get_x_min_max(data, x_attr))
@@ -507,7 +545,7 @@ function draw_chart2 () {
             let tooltip = d3.select('#tooltip')
             tooltip.html(content)
                 .style('left', (width * 0.83) + 'px')
-                .style('top', (y(0) + 10) + 'px')
+                .style('top', (y(0) + 50) + 'px')
                 .style('visibility', 'visible')
             // console.log('here')
         })
@@ -528,7 +566,7 @@ function draw_chart3 () {
     }
 
 
-    let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.1 * width }
+    let padding = { 'left': 0.2 * width, 'bottom': 0.1 * height, 'top': 0.05 * height, 'right': 0.1 * width }
     let x = d3.scaleLinear()
         .domain([54093518, 73058983])
         .range([padding.left, width - padding.right])
@@ -540,6 +578,15 @@ function draw_chart3 () {
     let z = d3.scaleLinear()
         .domain([2031,65000])
         .range([15,25])
+
+    chart3.append('g')
+        .attr('transform', `translate(${width * 0.0}, ${height * 0.8})`)
+        .append('text')
+        .attr("font-family", 'roboto')
+        .attr("font-size", d => 180)
+        .attr("stroke", '#CD5968')
+        .attr("fill", '#CD5968')
+        .text('👴')
 
     var images = chart3.selectAll(".images")
         .data(data)
@@ -575,7 +622,7 @@ function draw_chart3 () {
             tooltip.html(content)
                 .style('left', x(parseInt(d["Time"])) + 'px')
                 //.style('top',  y(xpos[parseInt(d["Index"])-1]) + 'px')
-                .style('top',  y(xpos[parseInt(d["Index"])-1]) -290 + 'px')
+                .style('top',  y(xpos[parseInt(d["Index"])-1]) -350 + 'px')
                 .style('visibility', 'visible');
             console.log( y(xpos[parseInt(d["Index"])-1]))
         })
