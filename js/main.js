@@ -55,7 +55,7 @@ function extract(data) {
         let x = d3.scaleLinear()
             .domain(get_x_min_max(data, x_attr))
             .range([padding.left, width - padding.right]);
-    
+
         x_value = x(get_time(data[d][x_attr]));
         tags = data[d]['hashtags'];
         for (t in tags) {
@@ -111,14 +111,14 @@ function cal_posi(hashtag) {
 
 function process_overlap(hashtag) {
     hashtag.sort(compareFunction2);
-    max_x = width / 10;
+    gapx = width / 8;
     for (h_curr in hashtag) {
         for (h in hashtag) {
             if (parseInt(h) >= parseInt(h_curr)) break;
-            while (hashtag[h][3] === hashtag[h_curr][3] && Math.abs(hashtag[h][2] - hashtag[h_curr][2]) <= max_x) {
-                hashtag[h_curr][2] -= max_x;
-                hashtag[h_curr][2] = Math.max(hashtag[h_curr][2], 10);
+            while (hashtag[h][3] === hashtag[h_curr][3] && Math.abs(hashtag[h][2] - hashtag[h_curr][2]) <= gapx) {
+                hashtag[h_curr][2] -= gapx;
             }
+            hashtag[h_curr][2] = Math.max(hashtag[h_curr][2], 10);
         }
     }
 }
@@ -137,12 +137,12 @@ function draw_hashtags(hashtags) {
         .attr("x", d => d[2])
         .attr("y", d => d[3])
         .attr("font-family", 'roboto')
-        .attr("font-size", d => 18 - (d[3]-50) / 30)
+        .attr("font-size", d => 18 - (d[3] - 50) / 30)
         .attr("stroke", '#CD5968')
         .attr("fill", '#CD5968')
         .attr("cursor", 'pointer')
-        // .attr("opacity", 1)
-        // .attr("font-weight", 'bold')
+    // .attr("opacity", 1)
+    // .attr("font-weight", 'bold')
 }
 
 let x_attr = 'created_at';
@@ -178,7 +178,7 @@ function get_x_min_max(data, attr) {
     return [min, max];
 }
 
-function calhot(d){
+function calhot(d) {
     let replies = parseInt(d['replies_count']);
     let retweets = parseInt(d['retweets_count']);
     let likes = parseInt(d['likes_count']);
@@ -308,17 +308,17 @@ let chart3 = d3
     .attr('height', height)
 
 
-function draw_chart3(){
+function draw_chart3() {
     let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.1 * width }
     let x = d3.scaleLinear()
         .domain([54093518, 73058983])
         .range([padding.left, width - padding.right])
     let y = d3.scaleLinear()
-        .domain([2031,65000])
+        .domain([2031, 65000])
         .range([height - padding.bottom, padding.top])
     let z = d3.scaleLinear()
-        .domain([2031,65000])
-        .range([5,15])
+        .domain([2031, 65000])
+        .range([5, 15])
     chart3.append('g')
         .selectAll('circle')
         .data(data)
@@ -372,8 +372,8 @@ d3.csv(data_file).then(function (DATA) {
     //draw_chart3();
 })
 
-d3.csv("../data/Follow.csv").then(function(DATA){
-    data = DATA.filter((d,i) => d["Time"] > 0);
+d3.csv("../data/Follow.csv").then(function (DATA) {
+    data = DATA.filter((d, i) => d["Time"] > 0);
     //console.log(data);
     draw_chart3();
 })
