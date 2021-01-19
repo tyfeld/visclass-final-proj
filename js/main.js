@@ -51,7 +51,7 @@ function extract(data) {
     hashtags = [[filted, 0, 0]];
     for (d in data) {
         // some auxiliary variables
-        let padding = { 'left': 0.2 * width, 'bottom': 0.1 * height, 'top': 0.2 * height, 'right': 0.05 * width }
+        let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.1 * width }
         let x = d3.scaleLinear()
             .domain(get_x_min_max(data, x_attr))
             .range([padding.left, width - padding.right]);
@@ -177,14 +177,18 @@ function get_x_min_max(data, attr) {
     return [min, max];
 }
 
+function calhot(d){
+    let replies = parseInt(d['replies_count']);
+    let retweets = parseInt(d['retweets_count']);
+    let likes = parseInt(d['likes_count']);
+    return replies + retweets + likes * 0.3;
+}
+
 function get_y_min_max(data) {
     let min = 1e9;
     let max = 0;
     data.forEach(d => {
-        let replies = parseInt(d['replies_count']);
-        let retweets = parseInt(d['retweets_count']);
-        let likes = parseInt(d['likes_count']);
-        let v = Math.pow(replies + retweets + likes * 0.5, 1 / 4);
+        let v = calhot(d);
         if (v > max) max = v;
         if (v < min) min = v;
     });
@@ -260,19 +264,11 @@ function draw_main() {
             return x(get_time(str));
         })
         .attr('cy', (d, i) => {
-            let replies = parseInt(d['replies_count']);
-            let retweets = parseInt(d['retweets_count']);
-            let likes = parseInt(d['likes_count']);
-            let hot = replies + retweets + likes * 0.5;
             // console.log(hot)
-            return y((Math.pow(hot, 1 / 4)));
+            return y(calhot(d));
         })
         .attr('r', (d, i) => {
-            let replies = parseInt(d['replies_count']);
-            let retweets = parseInt(d['retweets_count']);
-            let likes = parseInt(d['likes_count']);
-            let hot = replies + retweets + likes * 0.5;
-            return Math.sqrt(hot + 0.1);
+            return Math.sqrt(calhot(d));
         })
         .style('fill', '#62A55E')
         .attr('opacity', 0.6)
@@ -312,7 +308,7 @@ let chart3 = d3
 
 
 function draw_chart3(){
-    let padding = { 'left': 0.2 * width, 'bottom': 0.1 * height, 'top': 0.2 * height, 'right': 0.05 * width }
+    let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.1 * width }
     let x = d3.scaleLinear()
         .domain([54093518, 73058983])
         .range([padding.left, width - padding.right])
