@@ -128,22 +128,6 @@ function draw_hashtags(hashtags) {
         .attr('width', width)
         .attr('height', height);
 
-    console.log('asdf')
-    let tag_node = chart1.append('g')
-        .selectAll("rect")
-        .data(hashtags)
-        .join("rect")
-        .attr("height", 30)
-        .attr("weight", 50)
-        .attr("stroke", '#fff')
-        .attr("stroke-width", 0.5)
-        .attr("fill", 'red')
-        .attr("x", d => d[2])
-        .attr("y", d => d[3])
-        .attr("rx", 15)
-        .attr("ry", 15)
-
-    console.log('asdf')
     let text = chart1.append("g")
         .selectAll("text")
         .data(hashtags)
@@ -151,7 +135,13 @@ function draw_hashtags(hashtags) {
         .text(d => d[0])
         .attr("x", d => d[2])
         .attr("y", d => d[3])
-
+        .attr("font-family", 'roboto')
+        .attr("font-size", d => 18 - (d[3]-50) / 30)
+        .attr("stroke", '#CD5968')
+        .attr("fill", '#CD5968')
+        .attr("cursor", 'pointer')
+        // .attr("opacity", 1)
+        // .attr("font-weight", 'bold')
 }
 
 let x_attr = 'created_at';
@@ -284,7 +274,7 @@ function draw_main() {
             let hot = replies + retweets + likes * 0.5;
             return Math.sqrt(hot + 0.1);
         })
-        .style('fill', 'steelblue')
+        .style('fill', '#62A55E')
         .attr('opacity', 0.6)
         .on('mouseover', (e, d) => {
             let tweet = d['tweet'];
@@ -345,7 +335,7 @@ function draw_chart3(){
         .attr('cy', (d, i) => y(parseInt(d["Followers"])))
         //.attr('r', 3)
         .attr('r', (d, i) => z(parseInt(d["Followers"])))
-        .attr('fill', 'red')
+        .attr('fill', '#3488BC')
         .on('mouseover', (e, d) => {
             // // show a tooltip
             // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
