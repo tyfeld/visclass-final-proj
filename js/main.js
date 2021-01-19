@@ -118,19 +118,21 @@ function highlightTweet (id, usn, htgs) {
         })
         .attr('opacity', 0.9)
     let z = d3.scaleLinear()
-        .domain([2031, 65000])
-        .range([5, 15])
-    chart3.selectAll("circle")
+        .domain([2031,65000])
+        .range([5,15])
+    chart3.selectAll(".image")
         .transition()
         .duration(500)
         .style("opacity", 0.3)
-        .attr('r', (d, i) => z(parseInt(d["Followers"])) / 2)
-    chart3.selectAll("circle")
+        .attr('width', (d, i) => z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => z(parseInt(d["Followers"])))
+    chart3.selectAll(".image")
         .filter((d, i) => d["Username"] == usn)
         .transition()
         .duration(500)
         .style("opacity", 0.9)
-        .attr('r', (d, i) => z(parseInt(d["Followers"])) * 1.5)
+        .attr('width', (d, i) => z(parseInt(d["Followers"])) * 3)
+        .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
 }
 
 
@@ -158,13 +160,14 @@ function reset () {
         })
         .attr('opacity', 0.7)
     let z = d3.scaleLinear()
-        .domain([2031, 65000])
-        .range([5, 15])
-    chart3.selectAll('circle')
+        .domain([2031,65000])
+        .range([5,15])
+    chart3.selectAll('.image')
         .transition()
         .duration(500)
         .style("opacity", 0.7)
-        .attr('r', (d, i) => z(parseInt(d["Followers"])))
+        .attr('width', (d, i) => 2 * z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => 2 * z(parseInt(d["Followers"])))
 }
 
 function selectTag (tag) {
@@ -532,74 +535,112 @@ function draw_chart3 () {
         })])
         .range([height - padding.bottom, padding.top])
     let z = d3.scaleLinear()
-        .domain([2031, 65000])
-        .range([15, 30])
-    var size = 50
-    var defs = chart3.append('svg:defs')
-    defs.append("svg:pattern")
-        .attr("id", "grump_avatar")
-        .attr("width", size)
-        .attr("height", size)
-        .attr("patternUnits", "userSpaceOnUse")
-        .attr("preserveAspectRatio", "none")
-        .append("svg:image")
-        .attr("xlink:href", "../data/computersociety.jpg")
-        .attr("width", size)
-        .attr("height", size)
-        .attr("x", -size / 3)
-        .attr("y", -4)
+        .domain([2031,65000])
+        .range([5,15])
+
+    var images = chart3.selectAll(".images")
+        .data(data)
+        .enter()
+        .append("image")
+
+    images.attr("xlink:href", function(d){
+            console.log(d["Username"])
+            return "../img/the_navc.jpg"
+        })
+        .attr('x', (d, i) => {
+            //console.log('data', d); 
+            return x(parseInt(d["Time"]))
+        })
+        .style("opacity", 0.7)
+        .attr('y', (d, i) => y(xpos[i]))
+        .attr("width", (d, i) => 2 * z(parseInt(d["Followers"])))
+        .attr("height", (d, i) => 2 * z(parseInt(d["Followers"])))
+        .style("opacity", 0.7)
+        .on('click', function(e, d){
+            selectUser(d['Username'])
+        })
+        .on('mouseover', (e, d) => {
+            let name = d['Username']
+
+            let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
+
+            let str = d[x_attr];
+
+            let tooltip = d3.select('#tooltip1');
+            tooltip.html(content)
+                .style('left', e.x + 'px')
+                .style('top', e.y - 20 + 'px')
+                .style('visibility', 'visible');
+            // console.log('here')
+        })
+        .on('mouseout', (e, d) => {
+            let tooltip = d3.select('#tooltip1');
+            tooltip.style('visibility', 'hidden');
+        })
 
 
-        chart3.append('g')
-            .selectAll('circle')
-            .data(data)
-            .enter().append('circle')
-            .attr('class', 'point')
-            .attr('cx', (d, i) => {
-                //console.log('data', d); 
-                return x(parseInt(d["Time"]))
-            })
-            .style("opacity", 0.7)
-            .attr('cy', (d, i) => y(xpos[i]))
-            //.attr('r', 3)
-            .attr('r', (d, i) => z(parseInt(d["Followers"])))
-            .attr('fill', '#3488BC')
-            //.attr('fill',url('./data/computersociety.jpg'))
-            // .style("fill", (d,i) => {
-            //     if (d["Username"] == "computersociety")
-            //     return "url(#grump_avatar)"
-            // }
-            .on('click', function(e, d){
-                selectUser(d['Username'])
-            })
-            .on('mouseover', (e, d) => {
-                console.log(d["Username"])
-                // // show a tooltip
-                // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
-                // let institution = d['Institution']
-                // let grad_year = d['Ph.D. Graduation Year']
-                // let grad_school = d['Ph.D. Graduate School']
-                // let pubs = d['Publications']
-                // let hin = d[z_attr]
-                // let intes = d["Research Interest"]
-                // let content = name + ', ' + institution + '<br>' + 'Graduated in ' + grad_school + ' at '
-                //     + grad_year + '<br>Research Interest: ' + intes + '<br>Publications: ' + pubs + '<br>'
-                //     + 'H-index: ' + hin
-                // // tooltip
-                // let tooltip = d3.select('#tooltip')
-                // tooltip.html(content)
-                //     .style('left', (x(parseInt(d[x_attr])) + 15) + 'px')
-                //     .style('top', (y(parseInt(d[y_attr])) + 5) + 'px')
-                //     .style('visibility', 'visible')
-                //.transition().duration(500)
-
-                //fading
-                //fading(institution)
-                //console.log(d)
-                //console.log(padding.left)
-            })
+    // var size = 25
+    // var defs = chart3.append('svg:defs');
+    // defs.append("svg:pattern")
+    // .attr("id", "grump_avatar")
+    // .attr("width", size)
+    // .attr("height", size)
+    // .attr("patternUnits", "userSpaceOnUse")
+    // .attr("preserveAspectRatio","none") 
+    // .append("svg:image")
+    // .attr("xlink:href", "../img/skipher.jpg")
+    // .attr("width", size)
+    // .attr("height", size)
+    // .attr("x", -size/3)
+    // .attr("y", -4);
 
 
+    // chart3.append('g')
+    //     .selectAll('circle')
+    //     .data(data)
+    //     .enter().append('circle')
+    //     .attr('class', 'point')
+    //     .attr('cx', (d, i) => {
+    //         //console.log('data', d); 
+    //         return x(parseInt(d["Time"]))
+    //     })
+    //     .style("opacity", 0.7)
+    //     .attr('cy', (d, i) => y(xpos[i]))
+    //     .attr('r', (d, i) => z(parseInt(d["Followers"])))
+        // .attr('fill',url('./data/computersociety.jpg'))
+        // .style("fill", (d,i) => {
+        //     if (d["Username"] == "computersociety")
+        //     return "url(#grump_avatar)"
+        // })
+        // .on('click', function(e, d){
+        //     selectUser(d['Username'])
+        // })
+        // .on('mouseover', (e, d) => {
+        //     console.log(d["Username"])
+            // // show a tooltip
+            // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
+            // let institution = d['Institution']
+            // let grad_year = d['Ph.D. Graduation Year']
+            // let grad_school = d['Ph.D. Graduate School']
+            // let pubs = d['Publications']
+            // let hin = d[z_attr]
+            // let intes = d["Research Interest"]
+            // let content = name + ', ' + institution + '<br>' + 'Graduated in ' + grad_school + ' at '
+            //     + grad_year + '<br>Research Interest: ' + intes + '<br>Publications: ' + pubs + '<br>'
+            //     + 'H-index: ' + hin
+            // // tooltip
+            // let tooltip = d3.select('#tooltip')
+            // tooltip.html(content)
+            //     .style('left', (x(parseInt(d[x_attr])) + 15) + 'px')
+            //     .style('top', (y(parseInt(d[y_attr])) + 5) + 'px')
+            //     .style('visibility', 'visible')
+            //.transition().duration(500)
+
+            //fading
+            //fading(institution)
+            //console.log(d)
+            //console.log(padding.left)
+        // })
 }
 
 

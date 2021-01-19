@@ -53,6 +53,18 @@ html,body {
     opacity: 1;
 }
 
+#tooltip1{
+    position: absolute;           
+    text-align: left;
+    border-radius:5px;
+    width: 18%;
+    padding:4px;
+    color:black;
+    z-index: 3;
+    visibility: hidden;
+    opacity: 1;
+}
+
 .domain {
     stroke: rgb(80,80,80);
     stroke-linecap: round;
