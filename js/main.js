@@ -454,46 +454,68 @@ function draw_chart3(){
     let z = d3.scaleLinear()
         .domain([2031,65000])
         .range([5,15])
-    var size = 50
-    var defs = chart3.append('svg:defs');
-    defs.append("svg:pattern")
-    .attr("id", "grump_avatar")
-    .attr("width", size)
-    .attr("height", size)
-    .attr("patternUnits", "userSpaceOnUse")
-    .attr("preserveAspectRatio","none") 
-    .append("svg:image")
-    .attr("xlink:href", "../data/computersociety.jpg")
-    .attr("width", size)
-    .attr("height", size)
-    .attr("x", -size/3)
-    .attr("y", -4);
 
-
-    chart3.append('g')
-        .selectAll('circle')
+    var images = chart3.selectAll(".images")
         .data(data)
-        .enter().append('circle')
-        .attr('class', 'point')
-        .attr('cx', (d, i) => {
+        .enter()
+        .append("image")
+
+    images.attr("xlink:href", function(d){
+            console.log(d["Username"])
+            return "../img/the_navc.jpg"
+        })
+        .attr('x', (d, i) => {
             //console.log('data', d); 
             return x(parseInt(d["Time"]))
         })
         .style("opacity", 0.7)
-        .attr('cy', (d, i) => y(xpos[i]))
-        //.attr('r', 3)
-        .attr('r', (d, i) => z(parseInt(d["Followers"])))
-        .attr('fill', '#3488BC')
-        //.attr('fill',url('./data/computersociety.jpg'))
-        // .style("fill", (d,i) => {
-        //     if (d["Username"] == "computersociety")
-        //     return "url(#grump_avatar)"
-        // }
+        .attr('y', (d, i) => y(xpos[i]))
+        .attr("width", (d, i) => 2 * z(parseInt(d["Followers"])))
+        .attr("height", (d, i) => 2 * z(parseInt(d["Followers"])))
+        .style("opacity", 0.7)
         .on('click', function(e, d){
             selectUser(d['Username'])
         })
-        .on('mouseover', (e, d) => {
-            console.log(d["Username"])
+
+
+    // var size = 25
+    // var defs = chart3.append('svg:defs');
+    // defs.append("svg:pattern")
+    // .attr("id", "grump_avatar")
+    // .attr("width", size)
+    // .attr("height", size)
+    // .attr("patternUnits", "userSpaceOnUse")
+    // .attr("preserveAspectRatio","none") 
+    // .append("svg:image")
+    // .attr("xlink:href", "../img/skipher.jpg")
+    // .attr("width", size)
+    // .attr("height", size)
+    // .attr("x", -size/3)
+    // .attr("y", -4);
+
+
+    // chart3.append('g')
+    //     .selectAll('circle')
+    //     .data(data)
+    //     .enter().append('circle')
+    //     .attr('class', 'point')
+    //     .attr('cx', (d, i) => {
+    //         //console.log('data', d); 
+    //         return x(parseInt(d["Time"]))
+    //     })
+    //     .style("opacity", 0.7)
+    //     .attr('cy', (d, i) => y(xpos[i]))
+    //     .attr('r', (d, i) => z(parseInt(d["Followers"])))
+        // .attr('fill',url('./data/computersociety.jpg'))
+        // .style("fill", (d,i) => {
+        //     if (d["Username"] == "computersociety")
+        //     return "url(#grump_avatar)"
+        // })
+        // .on('click', function(e, d){
+        //     selectUser(d['Username'])
+        // })
+        // .on('mouseover', (e, d) => {
+        //     console.log(d["Username"])
             // // show a tooltip
             // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
             // let institution = d['Institution']
@@ -517,7 +539,7 @@ function draw_chart3(){
             //fading(institution)
             //console.log(d)
             //console.log(padding.left)
-        })
+        // })
 }
 
 
