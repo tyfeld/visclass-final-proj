@@ -55,7 +55,7 @@ function extract(data) {
         let x = d3.scaleLinear()
             .domain(get_x_min_max(data, x_attr))
             .range([padding.left, width - padding.right]);
-
+    
         x_value = x(get_time(data[d][x_attr]));
         tags = data[d]['hashtags'];
         for (t in tags) {
@@ -83,8 +83,8 @@ function extract(data) {
 // calculate the x value of each hashtag, according to mean of twitters' x values
 // returned hashtags: [['hashtag1', sum1, x1, y1], ['hashtag2', sum2, x2, y2], ...]
 function cal_posi(hashtag) {
-    top_height = 50;
-    gap_y = 30;
+    top_height = height / 6
+    gap_y = height / 10
     max_tags_y = 5; // criteria 1: max num of tags permitted within the same height
     max_gap = 5; // criteria 2: |sum1-sum2| <= max_gap
     max_tags = 25; // max num of tags permiited in total
