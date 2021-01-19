@@ -51,7 +51,7 @@ function extract(data) {
     hashtags = [[filted, 0, 0]];
     for (d in data) {
         // some auxiliary variables
-        let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.1 * width };
+        let padding = { 'left': 0.2 * width, 'bottom': 0.1 * height, 'top': 0.2 * height, 'right': 0.05 * width }
         let x = d3.scaleLinear()
             .domain(get_x_min_max(data, x_attr))
             .range([padding.left, width - padding.right]);
@@ -321,17 +321,17 @@ let chart3 = d3
     .attr('height', height)
 
 
-function draw_chart3() {
-    let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.05 * width }
+function draw_chart3(){
+    let padding = { 'left': 0.2 * width, 'bottom': 0.1 * height, 'top': 0.2 * height, 'right': 0.05 * width }
     let x = d3.scaleLinear()
-        .domain([2, 98])
+        .domain([54093518, 73058983])
         .range([padding.left, width - padding.right])
     let y = d3.scaleLinear()
-        .domain([2031, 60000])
+        .domain([2031,65000])
         .range([height - padding.bottom, padding.top])
     let z = d3.scaleLinear()
-        .domain([2000, 60000])
-        .range([1, 15])
+        .domain([2031,65000])
+        .range([5,15])
     chart3.append('g')
         .selectAll('circle')
         .data(data)
@@ -339,7 +339,7 @@ function draw_chart3() {
         .attr('class', 'point')
         .attr('cx', (d, i) => {
             //console.log('data', d); 
-            return x(parseInt(d["Row"]))
+            return x(parseInt(d["Time"]))
         })
         .style("opacity", 0.7)
         .attr('cy', (d, i) => y(parseInt(d["Followers"])))
@@ -368,7 +368,8 @@ function draw_chart3() {
 
             //fading
             //fading(institution)
-            // console.log(d["Followers"])
+            //console.log(d)
+            //console.log(padding.left)
         })
 }
 
@@ -381,5 +382,11 @@ d3.csv(data_file).then(function (DATA) {
     process_overlap(hashtags);
     draw_hashtags(hashtags);
     draw_main();
+    //draw_chart3();
+})
+
+d3.csv("../data/Follow.csv").then(function(DATA){
+    data = DATA.filter((d,i) => d["Time"] > 0);
+    //console.log(data);
     draw_chart3();
 })
