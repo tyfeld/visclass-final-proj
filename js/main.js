@@ -120,13 +120,13 @@ function highlightTweet (id, usn, htgs) {
     let z = d3.scaleLinear()
         .domain([2031,65000])
         .range([5,15])
-    chart3.selectAll(".image")
+    chart3.selectAll("image")
         .transition()
         .duration(500)
         .style("opacity", 0.3)
         .attr('width', (d, i) => z(parseInt(d["Followers"])))
         .attr('height', (d, i) => z(parseInt(d["Followers"])))
-    chart3.selectAll(".image")
+    chart3.selectAll("image")
         .filter((d, i) => d["Username"] == usn)
         .transition()
         .duration(500)
@@ -162,7 +162,7 @@ function reset () {
     let z = d3.scaleLinear()
         .domain([2031,65000])
         .range([5,15])
-    chart3.selectAll('.image')
+    chart3.selectAll('image')
         .transition()
         .duration(500)
         .style("opacity", 0.7)
@@ -185,17 +185,19 @@ function highlightUser (user) {
     let z = d3.scaleLinear()
         .domain([2031, 65000])
         .range([5, 15])
-    chart3.selectAll("circle")
+    chart3.selectAll("image")
         .transition()
         .duration(500)
         .style("opacity", 0.3)
-        .attr('r', (d, i) => z(parseInt(d["Followers"])) / 2)
-    chart3.selectAll("circle")
+        .attr('width', (d, i) => z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => z(parseInt(d["Followers"])))
+    chart3.selectAll("image")
         .filter((d, i) => d["Username"] == user)
         .transition()
         .duration(500)
         .style("opacity", 0.9)
-        .attr('r', (d, i) => z(parseInt(d["Followers"])) * 1.5)
+        .attr('width', (d, i) => 3 * z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => 3 * z(parseInt(d["Followers"])))
     chart2.selectAll('circle')
         .transition()
         .duration(500)
@@ -545,7 +547,7 @@ function draw_chart3 () {
 
     images.attr("xlink:href", function(d){
             console.log(d["Username"])
-            return "../img/the_navc.jpg"
+            return "../img/"+d["Username"]+".jpg"
         })
         .attr('x', (d, i) => {
             //console.log('data', d); 
@@ -559,24 +561,24 @@ function draw_chart3 () {
         .on('click', function(e, d){
             selectUser(d['Username'])
         })
-        .on('mouseover', (e, d) => {
-            let name = d['Username']
+        // .on('mouseover', (e, d) => {
+        //     let name = d['Username']
 
-            let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
+        //     let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
 
-            let str = d[x_attr];
+        //     let str = d[x_attr];
 
-            let tooltip = d3.select('#tooltip1');
-            tooltip.html(content)
-                .style('left', e.x + 'px')
-                .style('top', e.y - 20 + 'px')
-                .style('visibility', 'visible');
-            // console.log('here')
-        })
-        .on('mouseout', (e, d) => {
-            let tooltip = d3.select('#tooltip1');
-            tooltip.style('visibility', 'hidden');
-        })
+        //     let tooltip = d3.select('#tooltip1');
+        //     tooltip.html(content)
+        //         .style('left', e.x + 'px')
+        //         .style('top', e.y - 20 + 'px')
+        //         .style('visibility', 'visible');
+        //     // console.log('here')
+        // })
+        // .on('mouseout', (e, d) => {
+        //     let tooltip = d3.select('#tooltip1');
+        //     tooltip.style('visibility', 'hidden');
+        // })
 
 
     // var size = 25
