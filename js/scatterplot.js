@@ -17,10 +17,16 @@ let y_attr = 'hot';
 d3.select("body")
     .style("font-family", fontFamily)
 
+function func(x){
+    x = 60000000 - (60000000 - x) / 2
+    return x / 3 / 60000000 * x / 60000000 * x + 40000000
+}
 
 function get_time(str) {
     let time = ((((parseInt(str.slice(2, 4)) * 12 + parseInt(str.slice(5, 7))) * 31 + parseInt(str.slice(8, 10))) * 24 + parseInt(str.slice(11, 13))) * 60 + 
-        parseInt(str.slice(14, 16))) * 60 + parseInt(str.slice(17, 19)) - 600000000;
+        parseInt(str.slice(14, 16))) * 60 + parseInt(str.slice(17, 19)) - 600000000
+    if (time < -100000000) return time
+    if (time < 60000000) return func(time)
     return time;
 }
 
