@@ -381,6 +381,12 @@ function draw_hashtags(hashtags) {
         .attr('y', 10)
         .attr('width', 150)
         .attr('weight', 150)
+    chart1.append('image')
+        .attr('xlink:href',"../data/icon.png")
+        .attr('x', width * 0.02)
+        .attr('y', 10)
+        .attr('width', 200)
+        .attr('weight', 200)
         // .selectAll('.images')
         // .append('image')
         // .attr("xlink:href", function(d){
