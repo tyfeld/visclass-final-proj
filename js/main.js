@@ -120,16 +120,17 @@ function highlightTweet (id, usn, htgs) {
     let z = d3.scaleLinear()
         .domain([2031,65000])
         .range([5,15])
-    chart3.selectAll(".image")
-        .transition()
-        .duration(500)
+    chart3.selectAll("image")
+        //.transition()
+        //.duration(500)
         .style("opacity", 0.3)
         .attr('width', (d, i) => z(parseInt(d["Followers"])))
         .attr('height', (d, i) => z(parseInt(d["Followers"])))
+        .attr('visible', 'hidden')
     chart3.selectAll(".image")
         .filter((d, i) => d["Username"] == usn)
-        .transition()
-        .duration(500)
+        //.transition()
+        //.duration(500)
         .style("opacity", 0.9)
         .attr('width', (d, i) => z(parseInt(d["Followers"])) * 3)
         .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
@@ -536,7 +537,7 @@ function draw_chart3 () {
         .range([height - padding.bottom, padding.top])
     let z = d3.scaleLinear()
         .domain([2031,65000])
-        .range([5,15])
+        .range([15,25])
 
     var images = chart3.selectAll(".images")
         .data(data)
@@ -544,15 +545,17 @@ function draw_chart3 () {
         .append("image")
 
     images.attr("xlink:href", function(d){
-            console.log(d["Username"])
-            return "../img/the_navc.jpg"
+            return "../img/"+d["Username"]+".jpg"
         })
         .attr('x', (d, i) => {
             //console.log('data', d); 
             return x(parseInt(d["Time"]))
         })
-        .style("opacity", 0.7)
-        .attr('y', (d, i) => y(xpos[i]))
+        //.style("opacity", 0.7)
+        //.attr('y', (d, i) => y(xpos[i]))
+        .attr('y', function(d,i){
+            return y(xpos[parseInt(d["Index"])-1])
+        })
         .attr("width", (d, i) => 2 * z(parseInt(d["Followers"])))
         .attr("height", (d, i) => 2 * z(parseInt(d["Followers"])))
         .style("opacity", 0.7)
@@ -568,8 +571,8 @@ function draw_chart3 () {
 
             let tooltip = d3.select('#tooltip1');
             tooltip.html(content)
-                .style('left', e.x + 'px')
-                .style('top', e.y - 20 + 'px')
+                .style('left', x(parseInt(d["Time"])) + 'px')
+                .style('top',  y(xpos[parseInt(d["Index"])-1])- 20 + 'px')
                 .style('visibility', 'visible');
             // console.log('here')
         })
