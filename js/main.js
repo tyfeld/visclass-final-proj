@@ -330,7 +330,22 @@ function draw_chart3(){
     let z = d3.scaleLinear()
         .domain([2031,65000])
         .range([5,15])
-    console.log(y(xpos[1]))
+    var size = 50
+    var defs = chart3.append('svg:defs');
+    defs.append("svg:pattern")
+    .attr("id", "grump_avatar")
+    .attr("width", size)
+    .attr("height", size)
+    .attr("patternUnits", "userSpaceOnUse")
+    .attr("preserveAspectRatio","none") 
+    .append("svg:image")
+    .attr("xlink:href", "../data/computersociety.jpg")
+    .attr("width", size)
+    .attr("height", size)
+    .attr("x", -size/3)
+    .attr("y", -4);
+
+
     chart3.append('g')
         .selectAll('circle')
         .data(data)
@@ -345,7 +360,13 @@ function draw_chart3(){
         //.attr('r', 3)
         .attr('r', (d, i) => z(parseInt(d["Followers"])))
         .attr('fill', '#3488BC')
+        //.attr('fill',url('./data/computersociety.jpg'))
+        .style("fill", (d,i) => {
+            if (d["Username"] == "computersociety")
+            return "url(#grump_avatar)"
+        })
         .on('mouseover', (e, d) => {
+            console.log(d["Username"])
             // // show a tooltip
             // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
             // let institution = d['Institution']
