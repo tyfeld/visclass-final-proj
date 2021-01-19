@@ -95,6 +95,7 @@ function draw_hashtags(hashtags) {
         .attr('width', width)
         .attr('height', height);
 
+        console.log('asdf')
     let tag_node = svg.append('g')
         .selectAll("rect")
         .data(hashtags)
@@ -103,12 +104,13 @@ function draw_hashtags(hashtags) {
         .attr("weight", 50)
         .attr("stroke", '#fff')
         .attr("stroke-width", 0.5)
-        .attr("fill", "none")
+        .attr("fill", 'red')
         .attr("x", d => d[3])
         .attr("y", d => d[2])
         .attr("rx", 15)
         .attr("ry", 15)
 
+        console.log('asdf')
     let text = svg.append("g")
         .selectAll("text")
         .data(hashtags)
