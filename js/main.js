@@ -142,7 +142,7 @@ let uuser = 'qpvnswruascbqjsx'
 function selectUser(user){
     reset()
     if (user == uuser){
-        ttag = 'qpvnswruascbqjsx'
+        uuser = 'qpvnswruascbqjsx'
     }
     else{
         highlightUser(user)
