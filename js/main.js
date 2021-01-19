@@ -81,7 +81,7 @@ function reset(){
         .attr('r', (d, i) => {
             return Math.sqrt(calhot(d));
         })
-        .attr('opacity', 0.6)
+        .attr('opacity', 0.7)
     let z = d3.scaleLinear()
         .domain([2031,65000])
         .range([5,15])
@@ -400,7 +400,7 @@ function draw_main() {
             return Math.sqrt(calhot(d));
         })
         .style('fill', '#62A55E')
-        .attr('opacity', 0.6)
+        .attr('opacity', 0.7)
         .on('mouseover', (e, d) => {
             let tweet = d['tweet'];
             let name = d['name'];
