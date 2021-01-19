@@ -112,13 +112,12 @@ function cal_posi(hashtag) {
 function process_overlap(hashtag) {
     hashtag.sort(compareFunction2);
     max_x = width / 10;
-    console.log(max_x);
     for (h_curr in hashtag) {
         for (h in hashtag) {
             if (parseInt(h) >= parseInt(h_curr)) break;
             while (hashtag[h][3] === hashtag[h_curr][3] && Math.abs(hashtag[h][2] - hashtag[h_curr][2]) <= max_x) {
                 hashtag[h_curr][2] -= max_x;
-                hashtag[h_curr][2] = Math.max(hashtag[h_curr][2], width * 0.05);
+                hashtag[h_curr][2] = Math.max(hashtag[h_curr][2], 10);
             }
         }
     }
