@@ -1,7 +1,9 @@
 let _width = $(window).width()
 let _height = $(window).height()
-let width = 0.98 * _width
-let height = 0.98 * _height
+let width0 = 0.98 * _width
+let height0 = 0.98 * _height
+let width = width0/1.5
+let height = height0/3.5
 let fontFamily
 let data_file = '../data/VIS2020.csv'
 let ua = navigator.userAgent.toLowerCase()
@@ -131,3 +133,68 @@ d3.csv(data_file).then(function (DATA) {
     draw_hashtags(hashtags);
 })
 
+
+d3.csv("../data/test4.csv").then(function(DATA){
+    data = DATA;
+    data = data.filter((d, i) => (d["Followers"] != '' && d["Followers"] > 2000))
+    console.log(data)
+   draw_chart3()
+})
+
+let chart3 = d3
+    .select("#chart3")
+    .append("svg")
+    .attr('width', width)
+    .attr('height', height)
+
+
+function draw_chart3(){
+    let padding = { 'left': 0.1 * width, 'bottom': 0.1 * height, 'top': 0.1 * height, 'right': 0.05 * width }
+    let x = d3.scaleLinear()
+        .domain([2, 98])
+        .range([padding.left, width - padding.right])
+    let y = d3.scaleLinear()
+        .domain([2031,60000])
+        .range([height - padding.bottom, padding.top])
+    let z = d3.scaleLinear()
+        .domain([2000,60000])
+        .range([1,15])
+    chart3.append('g')
+        .selectAll('circle')
+        .data(data)
+        .enter().append('circle')
+        .attr('class', 'point')
+        .attr('cx', (d, i) => {
+            //console.log('data', d); 
+            return x(parseInt(d["Row"]))
+        })
+        .style("opacity", 0.7)
+        .attr('cy', (d, i) => y(parseInt(d["Followers"])))
+        //.attr('r', 3)
+        .attr('r', (d, i) => z(parseInt(d["Followers"])))
+        .attr('fill', 'red')
+        .on('mouseover', (e, d) => {
+            // // show a tooltip
+            // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
+            // let institution = d['Institution']
+            // let grad_year = d['Ph.D. Graduation Year']
+            // let grad_school = d['Ph.D. Graduate School']
+            // let pubs = d['Publications']
+            // let hin = d[z_attr]
+            // let intes = d["Research Interest"]
+            // let content = name + ', ' + institution + '<br>' + 'Graduated in ' + grad_school + ' at '
+            //     + grad_year + '<br>Research Interest: ' + intes + '<br>Publications: ' + pubs + '<br>'
+            //     + 'H-index: ' + hin
+            // // tooltip
+            // let tooltip = d3.select('#tooltip')
+            // tooltip.html(content)
+            //     .style('left', (x(parseInt(d[x_attr])) + 15) + 'px')
+            //     .style('top', (y(parseInt(d[y_attr])) + 5) + 'px')
+            //     .style('visibility', 'visible')
+            //.transition().duration(500)
+
+            //fading
+            //fading(institution)
+            console.log(d["Followers"])
+        })
+}
