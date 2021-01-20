@@ -27,7 +27,7 @@ d3.select("body")
 
 let title = d3.select('#title')
     .append('svg')
-    .attr('width', width)
+    .attr('width', width0)
     .attr('height', height0 * 0.06)
 
 let chart1 = d3.select('#chart1')
@@ -375,18 +375,18 @@ function draw_hashtags(hashtags) {
         .text('A Visualization for twitters about the VIS2020');
     // .attr("opacity", 1)
     // .attr("font-weight", 'bold')
-    chart1.append('image')
+    title.append('image')
         .attr('xlink:href',"../data/icon.png")
-        .attr('x', width )
+        .attr('x', width0*0.95)
         .attr('y', 10)
-        .attr('width', 150)
-        .attr('weight', 150)
+        .attr('width', 40)
+        .attr('weight', 40)
     chart1.append('image')
-        .attr('xlink:href',"../data/icon.png")
-        .attr('x', width * 0.02)
+        .attr('xlink:href',"../img/tags.jfif")
+        .attr('x', width * 0.021)
         .attr('y', 10)
-        .attr('width', 200)
-        .attr('weight', 200)
+        .attr('width', 180)
+        .attr('weight', 180)
         // .selectAll('.images')
         // .append('image')
         // .attr("xlink:href", function(d){
@@ -500,7 +500,7 @@ function draw_chart2() {
 
     
     chart2.append('g')
-        .attr('transform', `translate(${width * 0.0}, ${height * 0.8})`)
+        .attr('transform', `translate(${width * 0.02}, ${height * 0.8})`)
         .append('text')
         .attr("font-family", 'roboto')
         .attr("font-size", d => 180)
@@ -532,14 +532,6 @@ function draw_chart2() {
         .call(axis_x)
         .attr('font-family', fontFamily)
         .attr('font-size', '0.4rem')
-
-    chart2.append('g')
-        .attr('transform', `translate(${padding.left + (width - padding.left - padding.right) / 2}, ${height - padding.bottom})`)
-        .append('text')
-        .attr('class', 'axis_label')
-        .attr('dx', '-0.4rem')
-        .attr('dy', 0.08 * height)
-        .text('time')
 
     // y axis
     chart2.append('g')
@@ -575,7 +567,8 @@ function draw_chart2() {
         .attr('r', (d, i) => {
             return Math.sqrt(calhot(d))
         })
-        .style('fill', '#62A55E')
+        //.style('fill', '#62A55E')
+        .style('fill','	#1DA1F2')
         .attr('opacity', 0.7)
         .on('click', function (e, d) {
             // selectUser(d['Username'])
@@ -644,7 +637,7 @@ function draw_chart3() {
         .range([15, 25])
 
     chart3.append('g')
-        .attr('transform', `translate(${width * 0.0}, ${height * 0.8})`)
+        .attr('transform', `translate(${width * 0.02}, ${height * 0.8})`)
         .append('text')
         .attr("font-family", 'roboto')
         .attr("font-size", d => 180)
@@ -697,68 +690,7 @@ function draw_chart3() {
         })
 
 
-    // var size = 25
-    // var defs = chart3.append('svg:defs');
-    // defs.append("svg:pattern")
-    // .attr("id", "grump_avatar")
-    // .attr("width", size)
-    // .attr("height", size)
-    // .attr("patternUnits", "userSpaceOnUse")
-    // .attr("preserveAspectRatio","none") 
-    // .append("svg:image")
-    // .attr("xlink:href", "../img/skipher.jpg")
-    // .attr("width", size)
-    // .attr("height", size)
-    // .attr("x", -size/3)
-    // .attr("y", -4);
-
-
-    // chart3.append('g')
-    //     .selectAll('circle')
-    //     .data(data)
-    //     .enter().append('circle')
-    //     .attr('class', 'point')
-    //     .attr('cx', (d, i) => {
-    //         //console.log('data', d); 
-    //         return x(parseInt(d["Time"]))
-    //     })
-    //     .style("opacity", 0.7)
-    //     .attr('cy', (d, i) => y(xpos[i]))
-    //     .attr('r', (d, i) => z(parseInt(d["Followers"])))
-    // .attr('fill',url('./data/computersociety.jpg'))
-    // .style("fill", (d,i) => {
-    //     if (d["Username"] == "computersociety")
-    //     return "url(#grump_avatar)"
-    // })
-    // .on('click', function(e, d){
-    //     selectUser(d['Username'])
-    // })
-    // .on('mouseover', (e, d) => {
-    //     console.log(d["Username"])
-    // // show a tooltip
-    // let name = d['First Name'] + ' ' + d['Mid Name'] + ' ' + d['Last Name']
-    // let institution = d['Institution']
-    // let grad_year = d['Ph.D. Graduation Year']
-    // let grad_school = d['Ph.D. Graduate School']
-    // let pubs = d['Publications']
-    // let hin = d[z_attr]
-    // let intes = d["Research Interest"]
-    // let content = name + ', ' + institution + '<br>' + 'Graduated in ' + grad_school + ' at '
-    //     + grad_year + '<br>Research Interest: ' + intes + '<br>Publications: ' + pubs + '<br>'
-    //     + 'H-index: ' + hin
-    // // tooltip
-    // let tooltip = d3.select('#tooltip')
-    // tooltip.html(content)
-    //     .style('left', (x(parseInt(d[x_attr])) + 15) + 'px')
-    //     .style('top', (y(parseInt(d[y_attr])) + 5) + 'px')
-    //     .style('visibility', 'visible')
-    //.transition().duration(500)
-
-    //fading
-    //fading(institution)
-    //console.log(d)
-    //console.log(padding.left)
-    // })
+ 
 }
 
 
