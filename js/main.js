@@ -627,6 +627,7 @@ function draw_chart3() {
         var tmp = Math.floor(Math.random() * 1000)
         xpos.push(tmp)
     }
+    xpos = [723, 770, 117, 782, 864, 969, 807, 699, 740, 259, 650, 959, 504, 572, 589, 539, 955, 244, 482, 72, 505, 382, 51, 763, 943, 882]
 
 
     let padding = { 'left': 0.2 * width, 'bottom': 0.1 * height, 'top': 0.05 * height, 'right': 0.1 * width }
