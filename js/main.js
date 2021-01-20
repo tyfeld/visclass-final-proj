@@ -448,7 +448,7 @@ function get_y_min_max(data) {
     })
     return [min, max]
 }
-
+//
 function zoomed(event) {
     x = event.transform.rescaleX(x_t);
     update();
