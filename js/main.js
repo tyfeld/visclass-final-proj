@@ -451,6 +451,7 @@ function get_y_min_max(data) {
 //
 function zoomed(event) {
     x = event.transform.rescaleX(x_t);
+    //console.log(x_attr)
     update();
 }
 
@@ -473,10 +474,12 @@ function update() {
     let points = chart2.selectAll('.point')
         .data(data);
 
+
     points.enter().append('circle')
         .attr('class', 'point')
         .merge(points)
         .attr('cx', (d, i) => {
+            //console.log(d[x_attr])
             return x(get_time(d[x_attr]));
         })
         .attr('cy', (d, i) => y(calhot(d)))
@@ -585,7 +588,7 @@ function draw_chart2() {
                 + '<br>' + '<div style="font-size:0.6rem">' + tweet + '</div>'
                 + '<p align = "right" style="font-size:0.5rem">' + '👍 ' + likes + '    💬 ' + replies + '</p>'
 
-            let str = d[x_attr]
+            //let str = d[x_attr]
 
             let tooltip = d3.select('#tooltip')
             tooltip.html(content)
@@ -642,7 +645,7 @@ function draw_chart3() {
         .text('👴')
 
     var images = chart3.selectAll(".images")
-        .data(data)
+        .data(data2)
         .enter()
         .append("image")
 
@@ -761,7 +764,7 @@ d3.csv(data_file).then(function (DATA) {
 })
 
 d3.csv("../data/Follow.csv").then(function (DATA) {
-    data = DATA.filter((d, i) => d["Time"] > 0)
+    data2 = DATA.filter((d, i) => d["Time"] > 0)
     //console.log(data);
     draw_chart3()
 })
