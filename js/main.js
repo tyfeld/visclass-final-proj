@@ -382,7 +382,7 @@ function draw_hashtags(hashtags) {
         .attr('width', 150)
         .attr('weight', 150)
     chart1.append('image')
-        .attr('xlink:href',"../data/icon.png")
+        .attr('xlink:href',"../img/tags.jfif")
         .attr('x', width * 0.02)
         .attr('y', 10)
         .attr('width', 200)
@@ -529,14 +529,6 @@ function draw_chart2() {
         .call(axis_x)
         .attr('font-family', fontFamily)
         .attr('font-size', '0.4rem')
-
-    chart2.append('g')
-        .attr('transform', `translate(${padding.left + (width - padding.left - padding.right) / 2}, ${height - padding.bottom})`)
-        .append('text')
-        .attr('class', 'axis_label')
-        .attr('dx', '-0.4rem')
-        .attr('dy', 0.08 * height)
-        .text('time')
 
     // y axis
     chart2.append('g')
@@ -685,7 +677,6 @@ function draw_chart3() {
                 //.style('top',  y(xpos[parseInt(d["Index"])-1]) + 'px')
                 .style('top',  y(xpos[parseInt(d["Index"])-1]) -350 + 'px')
                 .style('visibility', 'visible');
-            console.log(y(xpos[parseInt(d["Index"]) - 1]))
         })
         .on('mouseout', (e, d) => {
             let tooltip = d3.select('#tooltip1');
