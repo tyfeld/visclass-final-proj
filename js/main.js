@@ -131,16 +131,16 @@ function highlightTweet(id, usn, htgs) {
         .domain([2031, 65000])
         .range([15, 25])
     chart3.selectAll("image")
-        //.transition()
-        //.duration(500)
+        .transition()
+        .duration(500)
         .style("opacity", 0.3)
         .attr('width', (d, i) => z(parseInt(d["Followers"])))
         .attr('height', (d, i) => z(parseInt(d["Followers"])))
         .attr('visible', 'hidden')
     chart3.selectAll(".image")
         .filter((d, i) => d["Username"] == usn)
-        //.transition()
-        //.duration(500)
+        .transition()
+        .duration(500)
         .style("opacity", 0.9)
         .attr('width', (d, i) => z(parseInt(d["Followers"])) * 3)
         .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
@@ -622,12 +622,12 @@ function draw_chart2() {
 function draw_chart3() {
     var num = 26
     var xpos = []
-    for (var i = 0; i < num; i++) {
-        // 随机生成50个点坐标
-        var tmp = Math.floor(Math.random() * 1000)
-        xpos.push(tmp)
-    }
-    xpos = [723, 770, 117, 782, 864, 969, 807, 699, 740, 259, 650, 959, 504, 572, 589, 539, 955, 244, 482, 72, 505, 382, 51, 763, 943, 882]
+    // for (var i = 0; i < num; i++) {
+    //     // 随机生成50个点坐标
+    //     var tmp = Math.floor(Math.random() * 1000)
+    //     xpos.push(tmp)
+    // }
+    xpos = [723, 770, 117, 782, 80, 80, 807, 699, 740, 259, 650, 959, 504, 572, 589, 539, 955, 244, 482, 72, 505, 382, 51, 763, 943, 882]
 
 
     let padding = { 'left': 0.2 * width, 'bottom': 0.1 * height, 'top': 0.05 * height, 'right': 0.1 * width }
@@ -650,7 +650,7 @@ function draw_chart3() {
         .attr("font-size", d => 180)
         .attr("stroke", '#CD5968')
         .attr("fill", '#CD5968')
-        .text('👴')
+        .text('🧑‍💻')
 
     var images = chart3.selectAll(".images")
         .data(data2)
@@ -674,6 +674,7 @@ function draw_chart3() {
         .style("opacity", 0.7)
         .on('click', function (e, d) {
             selectUser(d['Username'])
+            console.log((xpos[parseInt(d["Index"])-1]))
         })
         .on('mouseover', (e, d) => {
             let name = d['Name']
@@ -688,7 +689,7 @@ function draw_chart3() {
                 //.style('top',  y(xpos[parseInt(d["Index"])-1]) + 'px')
                 .style('top',  y(xpos[parseInt(d["Index"])-1]) -350 + 'px')
                 .style('visibility', 'visible');
-            console.log(y(xpos[parseInt(d["Index"]) - 1]))
+            //console.log(y(xpos[parseInt(d["Index"]) - 1]))
         })
         .on('mouseout', (e, d) => {
             let tooltip = d3.select('#tooltip1');
