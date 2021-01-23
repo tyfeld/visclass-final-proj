@@ -137,7 +137,7 @@ function highlightTweet(id, usn, htgs) {
         .attr('width', (d, i) => z(parseInt(d["Followers"])))
         .attr('height', (d, i) => z(parseInt(d["Followers"])))
         .attr('visible', 'hidden')
-    chart3.selectAll(".image")
+    chart3.selectAll("image")
         .filter((d, i) => d["Username"] == usn)
         .transition()
         .duration(500)
