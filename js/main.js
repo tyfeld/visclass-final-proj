@@ -241,9 +241,14 @@ function selectUser(user) {
     }
 }
 
-// transform type of hashtags from string ro array of string
+// transform type of data['hashtags'] from string ro array of string
+// transform type of data['created_at'] from string to date
 function process(data) {
     for (var i = 0; i < data.length; ++i) {
+        var str = data[i]['created_at'];
+        str = str.substring(0, 10) + 'T' + str.substring(11, 19);
+        data[i]['created_at'] = Date.parse(str);
+
         data[i]['hashtags'] = data[i]['hashtags'].substring(1, data[i]['hashtags'].length - 1) //remove '[' and ']'
         data[i]['hashtags'] = data[i]['hashtags'].split(', ') // split the string
         for (var j = 0; j < data[i]['hashtags'].length; ++j) {
@@ -279,7 +284,7 @@ function extract(data) {
             .domain(get_x_min_max(data, x_attr))
             .range([padding.left, width - padding.right])
 
-        x_value = x(get_time(data[d][x_attr]))
+        x_value = x(data[d][x_attr])
         tags = data[d]['hashtags']
         for (t in tags) {
             tag = tags[t]
@@ -401,6 +406,7 @@ function draw_hashtags(hashtags) {
 let x_attr = 'created_at'
 let y_attr = 'hot'
 
+/*
 function func(x) {
     x = 60000000 - (60000000 - x) / 2
     return x / 3 / 60000000 * x / 60000000 * x + 40000000
@@ -413,21 +419,18 @@ function get_time(str) {
     if (time < 60000000) return func(time)
     return time
 }
+*/
 
 function get_x_min_max(data, attr) {
-    let min = 1e9
-    let max = 0
+    let min = Date.now()
+    let max = new Date(1970, 1, 1) 
     data.forEach(d => {
-        let str = d[attr]
-        let v = get_time(str)
-        // console.log(v)
-
-        if (v > max)
-            max = v
-        if (v < min)
-            min = v
+        let dat = d[attr]
+        if (dat > max)
+            max = dat
+        if (dat < min)
+            min = dat
     })
-
     return [min, max]
 }
 
@@ -459,7 +462,7 @@ function update() {
     let axis_x = d3.axisBottom()
         .scale(x)
         .ticks(10)
-        .tickFormat(d => d);
+        .tickFormat(d3.timeFormat("%m-%d"));
 
     // x axis
     chart2.select('.x_axis').remove();
@@ -480,14 +483,14 @@ function update() {
         .merge(points)
         .attr('cx', (d, i) => {
             //console.log(d[x_attr])
-            return x(get_time(d[x_attr]));
+            return x(d[x_attr]);
         })
         .attr('cy', (d, i) => y(calhot(d)))
         .style('visibility', (d, i) => {
-            let x_p = x(get_time(d[x_attr]));
+            let x_p = x(d[x_attr])
             if (x_p < padding.left || x_p > (width - padding.right))
-                return 'hidden';
-            else return 'visible';
+                return 'hidden'
+            else return 'visible'
         })
     points.exit().remove();
 }
@@ -508,14 +511,14 @@ function draw_chart2() {
         .attr("fill", '#CD5968')
         .text('💬')
 
-    x_t = d3.scaleLinear()
+    x_t = d3.scaleTime()
         .domain(get_x_min_max(data, x_attr))
         .range([padding.left, width - padding.right])
     x = x_t;
     let axis_x = d3.axisBottom()
         .scale(x)
         .ticks(10)
-        .tickFormat(d => d)
+        .tickFormat(d3.timeFormat("%m-%d"))
 
     y = d3.scaleLinear()
         .domain(get_y_min_max(data))
@@ -555,10 +558,7 @@ function draw_chart2() {
         .enter().append('circle')
         .attr('class', 'point')
         .attr('cx', (d, i) => {
-            let str = d[x_attr]
-            // console.log(str)
-            // console.log(get_time(str))
-            return x(get_time(str))
+            return x(d[x_attr])
         })
         .attr('cy', (d, i) => {
             // console.log(hot)
@@ -695,8 +695,9 @@ function draw_chart3() {
 
 
 d3.csv(data_file).then(function (DATA) {
-    data = DATA.filter((d, i) => (get_time(d[x_attr]) > -100000000))
+    data = DATA
     process(data)
+    data = data.filter((d, i) => (d[x_attr] > new Date(2020, 1, 1)))
     hashtags = extract(data)
     cal_posi(hashtags)
     process_overlap(hashtags)
