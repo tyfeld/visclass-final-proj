@@ -371,7 +371,7 @@ function draw_hashtags(hashtags) {
             selectTag(i[0])
         })
     title.append('g')
-        .attr('transform', `translate(${width / 2 - 100}, ${height / 10})`)
+        .attr('transform', `translate(${width / 2 - 100}, ${height / 10 + 10})`)
         .append('text')
         .attr("font-family", 'roboto')
         .attr("font-size", d => 18)
@@ -386,12 +386,12 @@ function draw_hashtags(hashtags) {
         .attr('y', 10)
         .attr('width', 40)
         .attr('weight', 40)
-    chart1.append('image')
-        .attr('xlink:href',"../img/tags.jfif")
-        .attr('x', width * 0.021)
-        .attr('y', 10)
-        .attr('width', 180)
-        .attr('weight', 180)
+    // chart1.append('image')
+    //     .attr('xlink:href',"../img/tags.jfif")
+    //     .attr('x', width * 0.021)
+    //     .attr('y', 10)
+    //     .attr('width', 180)
+    //     .attr('weight', 180)
         // .selectAll('.images')
         // .append('image')
         // .attr("xlink:href", function(d){
@@ -502,14 +502,14 @@ function draw_chart2() {
         .attr('transform', `translate(${padding.left + (width - padding.left - padding.right) / 2}, ${padding.top})`)
 
     
-    chart2.append('g')
-        .attr('transform', `translate(${width * 0.02}, ${height * 0.8})`)
-        .append('text')
-        .attr("font-family", 'roboto')
-        .attr("font-size", d => 180)
-        .attr("stroke", '#CD5968')
-        .attr("fill", '#CD5968')
-        .text('💬')
+    // chart2.append('g')
+    //     .attr('transform', `translate(${width * 0.02}, ${height * 0.8})`)
+    //     .append('text')
+    //     .attr("font-family", 'roboto')
+    //     .attr("font-size", d => 180)
+    //     .attr("stroke", '#CD5968')
+    //     .attr("fill", '#CD5968')
+    //     .text('💬')
 
     x_t = d3.scaleTime()
         .domain(get_x_min_max(data, x_attr))
@@ -576,14 +576,17 @@ function draw_chart2() {
             ///console.log(d['id'],d['username'],d['hashtags'])
         })
         .on('mouseover', (e, d) => {
-            let tweet = d['tweet']
-            let name = d['name']
-            let time = d['created_at']
+            let tweet = d['tweet'];
+            let name = d['name'];
+            let date = d['date'];
+            let clock = d['time'];
+            let time = date + ' ' + clock;
 
             let replies = parseInt(d['replies_count'])
             let retweets = parseInt(d['retweets_count'])
             let likes = parseInt(d['likes_count'])
 
+            console.log(time)
             let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
                 + '<span style="font-size:0.3rem">' + time + '</span>'
                 + '<br>' + '<div style="font-size:0.6rem">' + tweet + '</div>'
@@ -637,14 +640,14 @@ function draw_chart3() {
         .domain([2031, 65000])
         .range([15, 25])
 
-    chart3.append('g')
-        .attr('transform', `translate(${width * 0.02}, ${height * 0.8})`)
-        .append('text')
-        .attr("font-family", 'roboto')
-        .attr("font-size", d => 180)
-        .attr("stroke", '#CD5968')
-        .attr("fill", '#CD5968')
-        .text('🧑‍💻')
+    // chart3.append('g')
+    //     .attr('transform', `translate(${width * 0.02}, ${height * 0.8})`)
+    //     .append('text')
+    //     .attr("font-family", 'roboto')
+    //     .attr("font-size", d => 180)
+    //     .attr("stroke", '#CD5968')
+    //     .attr("fill", '#CD5968')
+    //     .text('🧑‍💻')
 
     var images = chart3.selectAll(".images")
         .data(data2)
@@ -679,9 +682,9 @@ function draw_chart3() {
 
             let tooltip = d3.select('#tooltip1');
             tooltip.html(content)
-                .style('left', x(parseInt(d["Time"])) + 'px')
+                .style('left', x(parseInt(d["Time"])) - 10 + 'px')
                 //.style('top',  y(xpos[parseInt(d["Index"])-1]) + 'px')
-                .style('top',  y(xpos[parseInt(d["Index"])-1]) - 330 + 'px')
+                .style('top',  y(xpos[parseInt(d["Index"])-1]) - 290 + 'px')
                 .style('visibility', 'visible');
             //console.log(y(xpos[parseInt(d["Index"]) - 1]))
         })
