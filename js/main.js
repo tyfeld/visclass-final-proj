@@ -613,6 +613,7 @@ function draw_chart2() {
 
 
 function draw_chart3() {
+    
     var num = 26
     var xpos = []
     // for (var i = 0; i < num; i++) {
@@ -667,12 +668,12 @@ function draw_chart3() {
         .style("opacity", 0.7)
         .on('click', function (e, d) {
             selectUser(d['Username'])
-            console.log((xpos[parseInt(d["Index"])-1]))
+            //console.log((xpos[parseInt(d["Index"])-1]))
         })
         .on('mouseover', (e, d) => {
             let name = d['Name']
 
-            let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
+            let content = '<span style="font-size:0.6rem">' + name + '</span>' + '<br>'
 
             //let str = d[x_attr];
 
@@ -680,7 +681,7 @@ function draw_chart3() {
             tooltip.html(content)
                 .style('left', x(parseInt(d["Time"])) + 'px')
                 //.style('top',  y(xpos[parseInt(d["Index"])-1]) + 'px')
-                .style('top',  y(xpos[parseInt(d["Index"])-1]) -350 + 'px')
+                .style('top',  y(xpos[parseInt(d["Index"])-1]) - 330 + 'px')
                 .style('visibility', 'visible');
             //console.log(y(xpos[parseInt(d["Index"]) - 1]))
         })
