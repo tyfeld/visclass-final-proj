@@ -60,6 +60,7 @@ function highlightTag(tag) {
         .duration(500)
         .attr("font-size", d => (18 - (d[3] - 50) / 30) * 1.5)
         .attr('opacity', 0.9)
+    users = []
     chart2.selectAll('circle')
         .transition()
         .duration(500)
@@ -71,7 +72,10 @@ function highlightTag(tag) {
         .filter(function (d, i) {
             ddd = d['hashtags']
             for (dd in ddd) {
-                if (ddd[dd] == tag) return true
+                if (ddd[dd] == tag) {
+                    users.push(d['username'])
+                    return true
+                }
             }
             return false
         })
@@ -81,6 +85,29 @@ function highlightTag(tag) {
             return Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
+    let z = d3.scaleLinear()
+        .domain([2031, 65000])
+        .range([15, 25])
+    chart3.selectAll("image")
+        .transition()
+        .duration(500)
+        .style("opacity", 0.3)
+        .attr('width', (d, i) => z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => z(parseInt(d["Followers"])))
+        .attr('visible', 'hidden')
+    chart3.selectAll("image")
+        .filter((d, i) => {
+            for (usr in users) {
+                if (d['Username'] == users[usr]) {
+                    return true
+                }
+            }
+        })
+        .transition()
+        .duration(500)
+        .style("opacity", 0.9)
+        .attr('width', (d, i) => z(parseInt(d["Followers"])) * 3)
+        .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
 }
 
 
@@ -93,9 +120,9 @@ function highlightTweet(id, usn, htgs) {
     chart1.selectAll("text")
         .filter(function (d, i) {
             for (ht in htgs) {
-                //console.log(ht)
+                // console.log(htgs)
                 if (d[0] == htgs[ht]) {
-                    console.log("yes")
+                    console.log(d)
                     return true
                 }
             }
@@ -209,6 +236,7 @@ function highlightUser(user) {
         .style("opacity", 0.9)
         .attr('width', (d, i) => 3 * z(parseInt(d["Followers"])))
         .attr('height', (d, i) => 3 * z(parseInt(d["Followers"])))
+    htgs = []
     chart2.selectAll('circle')
         .transition()
         .duration(500)
@@ -218,13 +246,39 @@ function highlightUser(user) {
         .attr('opacity', 0.2)
     chart2.selectAll('circle')
         .filter(function (d, i) {
-            return d['username'] == user
+            if (d['username'] == user) {
+                for (ht in d['hashtags']) {
+                    // console.log(d['hashtags'])
+                    if (d['hashtags'][ht] != 'vis2020')
+                        htgs.push(d['hashtags'][ht])
+                }
+                return true
+            }
         })
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
             return Math.sqrt(calhot(d) * 3)
         })
+        .attr('opacity', 0.9)
+    console.log(htgs)
+    chart1.selectAll("text")
+        .transition()
+        .duration(500)
+        .attr("font-size", d => 18 - (d[3] - 50) / 30)
+        .attr('opacity', 0.3)
+    chart1.selectAll("text")
+        .filter(function (d, i) {
+            for (ht in htgs) {
+                if (d[0] == htgs[ht]) {
+                    return true
+                }
+            }
+            return false
+        })
+        .transition()
+        .duration(500)
+        .attr("font-size", d => (18 - (d[3] - 50) / 30) * 1.5)
         .attr('opacity', 0.9)
 }
 
@@ -586,7 +640,7 @@ function draw_chart2() {
             let retweets = parseInt(d['retweets_count'])
             let likes = parseInt(d['likes_count'])
 
-            console.log(time)
+            // console.log(time)
             let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
                 + '<span style="font-size:0.3rem">' + time + '</span>'
                 + '<br>' + '<div style="font-size:0.6rem">' + tweet + '</div>'
