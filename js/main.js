@@ -60,6 +60,7 @@ function highlightTag(tag) {
         .duration(500)
         .attr("font-size", d => (18 - (d[3] - 50) / 30) * 1.5)
         .attr('opacity', 0.9)
+    
     users = []
     chart2.selectAll('circle')
         .transition()
@@ -190,13 +191,44 @@ function reset() {
         .duration(500)
         .attr("font-size", d => 18 - (d[3] - 50) / 30)
         .attr('opacity', 0.7)
+    x = d3.scaleTime()
+        .domain(get_x_min_max(data, x_attr))
+        .range([padding.left, width - padding.right])
+    let axis_x = d3.axisBottom()
+        .scale(x)
+        .ticks(10)
+        .tickFormat(d3.timeFormat('%m-%d'))
+    chart2.select('.x_axis').remove()
+    chart2.append('g')
+        .attr('class', 'x_axis')
+        .attr('transform', `translate(${0}, ${height - padding.bottom})`)
+        .call(axis_x)
+        .attr('font-family', fontFamily)
+        .attr('font-size', '0.4rem')
+    // chart2.selectAll('circle').remove()
     chart2.selectAll('circle')
         .transition()
         .duration(500)
+        .style('visibility', (d, i) => {
+            let x_p = x(d[x_attr])
+            if (x_p < padding.left || x_p > (width - padding.right))
+                return 'hidden'
+            else return 'visible'
+        })
+        .attr('class', 'point')
+        .attr('visibility', 'visible')
+        .attr('cx', (d, i) => {
+            return x(d[x_attr])
+        })
+        .attr('cy', (d, i) => {
+            // console.log(hot)
+            return y(calhot(d))
+        })
         .attr('r', (d, i) => {
             return Math.sqrt(calhot(d))
         })
         .attr('opacity', 0.7)
+        
     let z = d3.scaleLinear()
         .domain([2031, 65000])
         .range([15, 25])
@@ -236,24 +268,71 @@ function highlightUser(user) {
         .style("opacity", 0.9)
         .attr('width', (d, i) => 3 * z(parseInt(d["Followers"])))
         .attr('height', (d, i) => 3 * z(parseInt(d["Followers"])))
-    htgs = []
-    chart2.selectAll('circle')
-        .transition()
-        .duration(500)
-        .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) / 2)
-        })
-        .attr('opacity', 0.2)
+    
+        let htgs = []
+    let min_x = Date.now();
+    let max_x = new Date(1970,1,1);
+    // 先确定横轴范围
     chart2.selectAll('circle')
         .filter(function (d, i) {
             if (d['username'] == user) {
                 for (ht in d['hashtags']) {
                     // console.log(d['hashtags'])
-                    if (d['hashtags'][ht] != 'vis2020')
+                    if (d['hashtags'][ht] != 'vis2020'){
                         htgs.push(d['hashtags'][ht])
+                        if (d[x_attr] < min_x) 
+                            min_x = d[x_attr]
+                        if (d[x_attr] > max_x)
+                            max_x = d[x_attr]
+                    }
                 }
                 return true
             }
+            else return false
+        })
+    // console.log([min_x, max_x])
+    // 修改坐标轴
+    x = d3.scaleTime()
+        .domain([min_x, max_x])
+        .range([padding.left, width - padding.right])
+    let axis_x = d3.axisBottom()
+        .scale(x)
+        .ticks(10)
+        .tickFormat(d3.timeFormat('%m-%d'))
+    chart2.select('.x_axis').remove();
+    chart2.append('g')
+        .attr('class', 'x_axis')
+        .attr('transform', `translate(${0}, ${height - padding.bottom})`)
+        .call(axis_x)
+        .attr('font-family', fontFamily)
+        .attr('font-size', '0.4rem')
+    // 筛选出时间范围内的点
+    chart2.selectAll('circle')
+        .transition()
+        .duration(500)
+        .style('visibility', (d, i) => {
+            let x_p = x(d[x_attr])
+            if (x_p < padding.left || x_p > (width - padding.right))
+                return 'hidden'
+            else return 'visible'
+        })
+        .attr('r', (d, i) => {
+            return Math.sqrt(calhot(d) / 2)
+        })
+        .attr('cx', (d, i) => {
+            return x(d[x_attr])
+        })
+        .attr('cy', (d, i) => {
+            return y(calhot(d))
+        })
+        .attr('opacity', 0.2)
+    // 修改透明度
+    chart2.selectAll('circle')
+        .filter(function (d, i) {
+            if (d['username'] == user) {
+                return true
+            }
+            else return false
         })
         .transition()
         .duration(500)
@@ -261,7 +340,7 @@ function highlightUser(user) {
             return Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
-    console.log(htgs)
+    // console.log(htgs)
     chart1.selectAll("text")
         .transition()
         .duration(500)
@@ -437,7 +516,7 @@ function draw_hashtags(hashtags) {
     title.append('image')
         .attr('xlink:href',"../data/icon.png")
         .attr('x', width0*0.95)
-        .attr('y', 10)
+        .attr('y', 0)
         .attr('width', 40)
         .attr('weight', 40)
     // chart1.append('image')
@@ -508,7 +587,7 @@ function get_y_min_max(data) {
 //
 function zoomed(event) {
     x = event.transform.rescaleX(x_t);
-    //console.log(x_attr)
+    // console.log(typeof(x_t))
     update();
 }
 
