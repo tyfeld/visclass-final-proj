@@ -40,7 +40,7 @@
 
 1. 点击第一部分的某个标签，在图二会高亮带有该标签的所有推特，图三会高亮关注这个标签的所有用户，如下图
 
-   ![hightlightTag.png](https://github.com/tyfeld/visclass-final-project/raw/master/readme_img/hightlightTag.png)
+   ![hightlightTag.png](https://github.com/tyfeld/visclass-final-proj/raw/master/readme_img/hightlightTag.png)
 
    https://github.com/tyfeld/visclass-final-project/raw/master/readme_img/hightlightTag.png
 
