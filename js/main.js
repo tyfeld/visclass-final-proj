@@ -126,7 +126,7 @@ function highlightTag(tag) {
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) * 3)
+            return 2 + Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
     let z = d3.scaleLinear()
@@ -195,7 +195,7 @@ function highlightTweet(id, usn, htgs) {
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) * 3)
+            return 2 + Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
     let z = d3.scaleLinear()
@@ -380,7 +380,7 @@ function highlightUser(user) {
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) * 3)
+            return 2 + Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
     // console.log(htgs)
