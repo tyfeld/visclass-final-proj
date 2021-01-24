@@ -268,7 +268,7 @@ function reset() {
             return y(calhot(d))
         })
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d))
+            return 2 + Math.sqrt(calhot(d))
         })
         .attr('opacity', 0.7)
         
@@ -696,7 +696,8 @@ function draw_chart2() {
         .ticks(10)
         .tickFormat(d3.timeFormat("%m-%d"))
 
-    y = d3.scaleLinear()
+    y = d3.scalePow()
+        .exponent(0.5)
         .domain(get_y_min_max(data))
         .range([height - padding.bottom, padding.top])
     let axis_y = d3.axisLeft()
@@ -741,10 +742,20 @@ function draw_chart2() {
             return y(calhot(d))
         })
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d))
+            return 2 + Math.sqrt(calhot(d))
         })
         //.style('fill', '#62A55E')
-        .style('fill','	#1DA1F2')
+        //.style('fill','	#1DA1F2')
+        .style('fill', (d, i) => {
+            let date1 = Date.parse("2020-04-20")
+            let date2 = Date.parse("2020-07-08")
+            let date3 = Date.parse("2020-10-25")
+            let date4 = Date.parse("2020-10-30")
+            let date = Date.parse(d['date'])
+            console.log(date1, date)
+            if (date < date1 || (date > date2 && date < date3) || (date > date4)) return "#377eb8"
+            else return "#4daf4a"
+        })
         .attr('opacity', 0.7)
         .on('click', function (e, d) {
             // selectUser(d['Username'])
@@ -872,7 +883,6 @@ function draw_chart3() {
 
  
 }
-
 
 d3.csv(data_file).then(function (DATA) {
     data = DATA
