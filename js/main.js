@@ -754,7 +754,7 @@ function draw_chart2() {
             let date3 = Date.parse("2020-10-25")
             let date4 = Date.parse("2020-10-30")
             let date = Date.parse(d['date'])
-            console.log(date1, date)
+            // console.log(date1, date)
             if (date < date1 || (date > date2 && date < date3) || (date > date4)) return "#377eb8"
             else return "#4daf4a"
         })
