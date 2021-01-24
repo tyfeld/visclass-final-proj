@@ -62,13 +62,56 @@ function highlightTag(tag) {
         .attr('opacity', 0.9)
     
     users = []
+    let min_x = Date.now();
+    let max_x = new Date(1970,1,1);
+    // 确定时间轴范围
+    chart2.selectAll('circle')
+        .filter((d, i) => {
+            ddd = d['hashtags']
+            for (dd in ddd) {
+                if (ddd[dd] == tag) {
+                    if (d[x_attr] < min_x) min_x = d[x_attr]
+                    if (d[x_attr] > max_x) max_x = d[x_attr]
+                }
+            }
+        })
+    // 修改坐标轴
+    x = d3.scaleTime()
+        .domain([min_x, max_x])
+        .range([padding.left, width - padding.right])
+    let axis_x = d3.axisBottom()
+        .scale(x)
+        .ticks(10)
+        .tickFormat(d3.timeFormat('%m-%d'))
+    chart2.select('.x_axis').remove();
+    chart2.append('g')
+        .attr('class', 'x_axis')
+        .attr('transform', `translate(${0}, ${height - padding.bottom})`)
+        .call(axis_x)
+        .attr('font-family', fontFamily)
+        .attr('font-size', '0.4rem')
+    // 筛选出时间范围内的点
     chart2.selectAll('circle')
         .transition()
         .duration(500)
+        .style('visibility', (d, i) => {
+            let x_p = x(d[x_attr])
+            if (x_p < padding.left || x_p > width - padding.left) {
+                return 'hidden'
+            }
+            else return 'visible'
+        })
         .attr('r', (d, i) => {
             return Math.sqrt(calhot(d) / 2)
         })
+        .attr('cx', (d, i) => {
+            return x(d[x_attr])
+        })
+        .attr('cy', (d, i) => {
+            return y(calhot(d))
+        })
         .attr('opacity', 0.2)
+    // 更改透明度
     chart2.selectAll('circle')
         .filter(function (d, i) {
             ddd = d['hashtags']
