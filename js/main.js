@@ -126,7 +126,7 @@ function highlightTag(tag) {
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) * 3)
+            return 2 + Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
     let z = d3.scaleLinear()
@@ -195,7 +195,7 @@ function highlightTweet(id, usn, htgs) {
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) * 3)
+            return 2 + Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
     let z = d3.scaleLinear()
@@ -380,7 +380,7 @@ function highlightUser(user) {
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
-            return Math.sqrt(calhot(d) * 3)
+            return 2 + Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
     // console.log(htgs)
@@ -869,11 +869,11 @@ function draw_chart3() {
 
             let tooltip = d3.select('#tooltip1');
             tooltip.html(content)
-                .style('left', x(parseInt(d["Time"])) - 10 + 'px')
+                .style('left', x(parseInt(d["Time"])) + 'px')
                 //.style('top',  y(xpos[parseInt(d["Index"])-1]) + 'px')
-                .style('top',  y(xpos[parseInt(d["Index"])-1]) - 290 + 'px')
+                .style('top',  y(xpos[parseInt(d["Index"])-1]) - 1.4*height + 'px')
                 .style('visibility', 'visible');
-            //console.log(y(xpos[parseInt(d["Index"]) - 1]))
+            //console.log(height)
         })
         .on('mouseout', (e, d) => {
             let tooltip = d3.select('#tooltip1');
