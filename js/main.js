@@ -48,6 +48,12 @@ let chart3 = d3
     .attr('width', width)
     .attr('height', height + 40)
 
+let chart4 = d3.select('#chart4')
+    .append('svg')
+    .attr('width', width0)
+    .attr('height', height)
+    .attr('overflow', 'visible')
+
 let ttag = 'null'
 
 function highlightTag(tag) {
@@ -62,10 +68,10 @@ function highlightTag(tag) {
         .duration(500)
         .attr("font-size", d => (18 - (d[3] - 50) / 30) * 1.5)
         .attr('opacity', 0.9)
-    
+
     users = []
     let min_x = Date.now();
-    let max_x = new Date(1970,1,1);
+    let max_x = new Date(1970, 1, 1);
     // 确定时间轴范围
     chart2.selectAll('circle')
         .filter((d, i) => {
@@ -138,8 +144,8 @@ function highlightTag(tag) {
         .transition()
         .duration(500)
         .style("opacity", 0.3)
-        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
-        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
+        .attr('width', (d, i) => z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => z(parseInt(d["Followers"])))
         .attr('visible', 'hidden')
     chart3.selectAll("image")
         .filter((d, i) => {
@@ -152,8 +158,8 @@ function highlightTag(tag) {
         .transition()
         .duration(500)
         .style("opacity", 0.9)
-        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
-        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
+        .attr('width', (d, i) => z(parseInt(d["Followers"])) * 3)
+        .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
 }
 
 
@@ -207,16 +213,16 @@ function highlightTweet(id, usn, htgs) {
         .transition()
         .duration(500)
         .style("opacity", 0.3)
-        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
-        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
+        .attr('width', (d, i) => z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => z(parseInt(d["Followers"])))
         .attr('visible', 'hidden')
     chart3.selectAll("image")
         .filter((d, i) => d["Username"] == usn)
         .transition()
         .duration(500)
         .style("opacity", 0.9)
-        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
-        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
+        .attr('width', (d, i) => z(parseInt(d["Followers"])) * 3)
+        .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
 }
 
 
@@ -273,7 +279,7 @@ function reset() {
             return 2 + Math.sqrt(calhot(d))
         })
         .attr('opacity', 0.7)
-        
+
     let z = d3.scaleLinear()
         .domain([2031, 65000])
         .range([15, 25])
@@ -281,8 +287,8 @@ function reset() {
         .transition()
         .duration(500)
         .style("opacity", 0.7)
-        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])))
-        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])))
+        .attr('width', (d, i) => 2 * z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => 2 * z(parseInt(d["Followers"])))
 }
 
 function selectTag(tag) {
@@ -304,28 +310,28 @@ function highlightUser(user) {
         .transition()
         .duration(500)
         .style("opacity", 0.3)
-        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
-        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
+        .attr('width', (d, i) => z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => z(parseInt(d["Followers"])))
     chart3.selectAll("image")
         .filter((d, i) => d["Username"] == user)
         .transition()
         .duration(500)
         .style("opacity", 0.9)
-        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
-        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
-    
-        let htgs = []
+        .attr('width', (d, i) => 3 * z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => 3 * z(parseInt(d["Followers"])))
+
+    let htgs = []
     let min_x = Date.now();
-    let max_x = new Date(1970,1,1);
+    let max_x = new Date(1970, 1, 1);
     // 先确定横轴范围
     chart2.selectAll('circle')
         .filter(function (d, i) {
             if (d['username'] == user) {
                 for (ht in d['hashtags']) {
                     // console.log(d['hashtags'])
-                    if (d['hashtags'][ht] != 'vis2020'){
+                    if (d['hashtags'][ht] != 'vis2020') {
                         htgs.push(d['hashtags'][ht])
-                        if (d[x_attr] < min_x) 
+                        if (d[x_attr] < min_x)
                             min_x = d[x_attr]
                         if (d[x_attr] > max_x)
                             max_x = d[x_attr]
@@ -559,8 +565,8 @@ function draw_hashtags(hashtags) {
     // .attr("opacity", 1)
     // .attr("font-weight", 'bold')
     title.append('image')
-        .attr('xlink:href',"../data/icon.png")
-        .attr('x', width0*0.95)
+        .attr('xlink:href', "../data/icon.png")
+        .attr('x', width0 * 0.95)
         .attr('y', 0)
         .attr('width', 40)
         .attr('weight', 40)
@@ -570,15 +576,15 @@ function draw_hashtags(hashtags) {
     //     .attr('y', 10)
     //     .attr('width', 180)
     //     .attr('weight', 180)
-        // .selectAll('.images')
-        // .append('image')
-        // .attr("xlink:href", function(d){
-        //     return "../data/icon.png"
-        // })
-        // .attr('x', 0)
-        // .attr('y', 0)
-        // .attr('width', 100)
-        // .attr('weight', 100)
+    // .selectAll('.images')
+    // .append('image')
+    // .attr("xlink:href", function(d){
+    //     return "../data/icon.png"
+    // })
+    // .attr('x', 0)
+    // .attr('y', 0)
+    // .attr('width', 100)
+    // .attr('weight', 100)
 }
 
 let x_attr = 'created_at'
@@ -601,7 +607,7 @@ function get_time(str) {
 
 function get_x_min_max(data, attr) {
     let min = Date.now()
-    let max = new Date(1970, 1, 1) 
+    let max = new Date(1970, 1, 1)
     data.forEach(d => {
         let dat = d[attr]
         if (dat > max)
@@ -679,7 +685,7 @@ function draw_chart2() {
     chart2.append('g')
         .attr('transform', `translate(${padding.left + (width - padding.left - padding.right) / 2}, ${padding.top})`)
 
-    
+
     // chart2.append('g')
     //     .attr('transform', `translate(${width * 0.02}, ${height * 0.8})`)
     //     .append('text')
@@ -754,7 +760,6 @@ function draw_chart2() {
             let date3 = Date.parse("2020-10-25")
             let date4 = Date.parse("2020-10-30")
             let date = Date.parse(d['date'])
-            // console.log(date1, date)
             if (date < date1 || (date > date2 && date < date3) || (date > date4)) return "#377eb8"
             else return "#4daf4a"
         })
@@ -801,11 +806,11 @@ function draw_chart2() {
         .translateExtent(extent)
         .extent(extent)
         .on('zoom', zoomed));
+
 }
 
-
 function draw_chart3() {
-    
+
     var num = 26
     var xpos = []
     // for (var i = 0; i < num; i++) {
@@ -855,8 +860,8 @@ function draw_chart3() {
         .attr('y', function (d, i) {
             return y(xpos[parseInt(d["Index"]) - 1])
         })
-        .attr("width", (d, i) => Cz * z(parseInt(d["Followers"])))
-        .attr("height", (d, i) => Cz * z(parseInt(d["Followers"])))
+        .attr("width", (d, i) => 2 * z(parseInt(d["Followers"])))
+        .attr("height", (d, i) => 2 * z(parseInt(d["Followers"])))
         .style("opacity", 0.7)
         .on('click', function (e, d) {
             selectUser(d['Username'])
@@ -873,7 +878,7 @@ function draw_chart3() {
             tooltip.html(content)
                 .style('left', x(parseInt(d["Time"])) + 'px')
                 //.style('top',  y(xpos[parseInt(d["Index"])-1]) + 'px')
-                .style('top',  y(xpos[parseInt(d["Index"])-1]) - 1.4*height + 'px')
+                .style('top', y(xpos[parseInt(d["Index"]) - 1]) - 1.4 * height + 'px')
                 .style('visibility', 'visible');
             //console.log(height)
         })
@@ -882,8 +887,90 @@ function draw_chart3() {
             tooltip.style('visibility', 'hidden');
         })
 
+}
 
- 
+function draw_chart4() {
+    let x0 = padding.left * 0.45
+    let y0 = - 0.9 * _height
+    let gap_y = _height * 0.15
+    let r = 3
+
+    let circles_y = [0, 1, 2, 3, 4, 5]
+    for (d in circles_y) {
+        circles_y[d] = y0 + circles_y[d] * gap_y
+    }
+    let vertical_lines = [0, 1, 2, 3, 4]
+    for (d in vertical_lines) {
+        let y1 = circles_y[d] + r / 2
+        let y2 = y1 + gap_y - r
+        let pos = { 'y1': y1, 'y2': y2 }
+        vertical_lines[d] = pos
+    }
+    let hor_lines = [1, 2, 3, 4]
+    let hor_length = padding.left * 0.3
+    let text = [[0, 0, "2020-04-20"], [0, 1, "Paper"], [0, 2, "submission"], [0, 3, "deadline"],
+    [1, 0, "2020-07-08"], [1, 1, "Author"], [1, 2, "notification"], [1, 3, "deadline"],
+    [2, 0, "2020-10-25"], [2, 1, "VIS2020"], [2, 2, "Conference"],
+    [3, 0, "2020-10-30"]]
+
+    chart4.append('g')
+        .selectAll('circle')
+        .data(circles_y)
+        .join('circle')
+        .attr('cx', x0)
+        .attr('cy', d => d)
+        .attr('r', r)
+        .attr('fill', 'white')
+        .attr('stroke', 'black')
+
+    chart4.append('g')
+        .selectAll('line')
+        .data(vertical_lines)
+        .join('line')
+        .attr('x1', x0)
+        .attr('y1', d => d.y1)
+        .attr('x2', x0)
+        .attr('y2', d => d.y2)
+        .attr('stroke-width', 2)
+        .attr('stroke', (d, i) => {
+            if (i % 2 === 0) return '#377eb8'
+            else return '#4daf4a'
+        })
+
+    chart4.append('g')
+        .selectAll('line')
+        .data(hor_lines)
+        .join('line')
+        .attr('x1', (d, i) => {
+            if (i % 2 === 0) return x0
+            else return x0 - hor_length
+        })
+        .attr('x2', (d, i) => {
+            if (i % 2 === 0) return x0 + hor_length
+            else return x0
+        })
+        .attr('y1', d => circles_y[d])
+        .attr('y2', d => circles_y[d])
+        .attr('stroke-width', 2)
+        .attr('stroke', (d, i) => {
+            if (i % 2 === 1) return '#377eb8'
+            else return '#4daf4a'
+        })
+
+    chart4.append('g')
+        .selectAll('text')
+        .data(text)
+        .join('text')
+        .attr('x', (d, i) => {
+            if (d[0] % 2 === 0) return x0 + 10
+            else return x0 + 10 - hor_length
+        })
+        .attr('y', (d, i) => {
+            let y = circles_y[d[0] + 1] + 15
+            y += d[1] * 15
+            return y
+        })
+        .text(d => d[2])
 }
 
 d3.csv(data_file).then(function (DATA) {
@@ -896,6 +983,7 @@ d3.csv(data_file).then(function (DATA) {
     draw_hashtags(hashtags)
     draw_chart2()
     //draw_chart3();
+    draw_chart4()
 })
 
 d3.csv("../data/Follow.csv").then(function (DATA) {
