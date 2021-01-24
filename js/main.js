@@ -13,6 +13,8 @@ if (/\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)) {
     fontFamily = "PingFangSC-Regular"
 }
 
+let Cz = 2 * height0 / 1000
+
 let datahash = {}
 let iid = 0
 
@@ -136,8 +138,8 @@ function highlightTag(tag) {
         .transition()
         .duration(500)
         .style("opacity", 0.3)
-        .attr('width', (d, i) => z(parseInt(d["Followers"])))
-        .attr('height', (d, i) => z(parseInt(d["Followers"])))
+        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
+        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
         .attr('visible', 'hidden')
     chart3.selectAll("image")
         .filter((d, i) => {
@@ -150,8 +152,8 @@ function highlightTag(tag) {
         .transition()
         .duration(500)
         .style("opacity", 0.9)
-        .attr('width', (d, i) => z(parseInt(d["Followers"])) * 3)
-        .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
+        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
+        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
 }
 
 
@@ -205,16 +207,16 @@ function highlightTweet(id, usn, htgs) {
         .transition()
         .duration(500)
         .style("opacity", 0.3)
-        .attr('width', (d, i) => z(parseInt(d["Followers"])))
-        .attr('height', (d, i) => z(parseInt(d["Followers"])))
+        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
+        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
         .attr('visible', 'hidden')
     chart3.selectAll("image")
         .filter((d, i) => d["Username"] == usn)
         .transition()
         .duration(500)
         .style("opacity", 0.9)
-        .attr('width', (d, i) => z(parseInt(d["Followers"])) * 3)
-        .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
+        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
+        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
 }
 
 
@@ -279,8 +281,8 @@ function reset() {
         .transition()
         .duration(500)
         .style("opacity", 0.7)
-        .attr('width', (d, i) => 2 * z(parseInt(d["Followers"])))
-        .attr('height', (d, i) => 2 * z(parseInt(d["Followers"])))
+        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])))
 }
 
 function selectTag(tag) {
@@ -302,15 +304,15 @@ function highlightUser(user) {
         .transition()
         .duration(500)
         .style("opacity", 0.3)
-        .attr('width', (d, i) => z(parseInt(d["Followers"])))
-        .attr('height', (d, i) => z(parseInt(d["Followers"])))
+        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
+        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 0.5)
     chart3.selectAll("image")
         .filter((d, i) => d["Username"] == user)
         .transition()
         .duration(500)
         .style("opacity", 0.9)
-        .attr('width', (d, i) => 3 * z(parseInt(d["Followers"])))
-        .attr('height', (d, i) => 3 * z(parseInt(d["Followers"])))
+        .attr('width', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
+        .attr('height', (d, i) => Cz * z(parseInt(d["Followers"])) * 1.5)
     
         let htgs = []
     let min_x = Date.now();
@@ -752,7 +754,7 @@ function draw_chart2() {
             let date3 = Date.parse("2020-10-25")
             let date4 = Date.parse("2020-10-30")
             let date = Date.parse(d['date'])
-            console.log(date1, date)
+            // console.log(date1, date)
             if (date < date1 || (date > date2 && date < date3) || (date > date4)) return "#377eb8"
             else return "#4daf4a"
         })
@@ -853,8 +855,8 @@ function draw_chart3() {
         .attr('y', function (d, i) {
             return y(xpos[parseInt(d["Index"]) - 1])
         })
-        .attr("width", (d, i) => 2 * z(parseInt(d["Followers"])))
-        .attr("height", (d, i) => 2 * z(parseInt(d["Followers"])))
+        .attr("width", (d, i) => Cz * z(parseInt(d["Followers"])))
+        .attr("height", (d, i) => Cz * z(parseInt(d["Followers"])))
         .style("opacity", 0.7)
         .on('click', function (e, d) {
             selectUser(d['Username'])
