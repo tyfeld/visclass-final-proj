@@ -32,6 +32,9 @@ let x;
 let x_t;
 let y;
 
+var clickTimeId
+let clickTimeDelay = 200
+
 let x_attr = 'created_at'
 let y_attr = 'hot'
 
@@ -630,6 +633,7 @@ function calhot(d) {
 
 // zoom function
 function zoomed(event) {
+    clearTimeout(clickTimeId)
     x = event.transform.rescaleX(x_t);
     update();
 }
@@ -669,7 +673,6 @@ function update() {
         })
     points.exit().remove();
 }
-
 
 // tweet chart
 function draw_chart2() {
@@ -746,7 +749,10 @@ function draw_chart2() {
         })
         .attr('opacity', tweet_opacity[1])
         .on('click', function (e, d) {
-            selectTweet(d['id'], d['username'], d['hashtags'])
+            clearTimeout(clickTimeId)
+            clickTimeId = setTimeout(function() {
+              selectTweet(d['id'], d['username'], d['hashtags'])
+            }, clickTimeDelay)
         })
         .on('mouseover', (e, d) => {
             let tweet = d['tweet'];
@@ -781,7 +787,7 @@ function draw_chart2() {
         .translateExtent(extent)
         .extent(extent)
         .on('zoom', zoomed))
-        .on("dblclick.zoom", null);
+        // .on("dblclick.zoom", null);
 }
 
 
