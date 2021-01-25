@@ -15,6 +15,7 @@ if (/\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)) {
 
 let Cz = 2 * height0 / 1000
 let DATA_xpos = [723, 770, 117, 782, 80, 80, 807, 699, 740, 259, 650, 959, 504, 572, 589, 539, 955, 244, 482, 72, 505, 382, 51, 763, 943, 882]
+let username_y = 0.7
 
 let datahash = {}
 let iid = 0
@@ -831,7 +832,7 @@ function draw_chart3() {
             let tooltip = d3.select('#tooltip1');
             tooltip.html(content)
                 .style('left', x(parseInt(d["Time"])) + 'px')
-                .style('top', y(xpos[parseInt(d["Index"]) - 1]) - 0.68 * height0 + 'px')
+                .style('top', y(xpos[parseInt(d["Index"]) - 1]) - username_y * height0 + 'px')
                 .style('visibility', 'visible');
         })
         .on('mouseout', (e, d) => {
