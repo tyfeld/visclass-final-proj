@@ -14,6 +14,7 @@ if (/\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)) {
 }
 
 let Cz = 2 * height0 / 1000
+let DATA_xpos = [723, 770, 117, 782, 80, 80, 807, 699, 740, 259, 650, 959, 504, 572, 589, 539, 955, 244, 482, 72, 505, 382, 51, 763, 943, 882]
 
 let datahash = {}
 let iid = 0
@@ -23,7 +24,10 @@ let x;
 let x_t;
 let y;
 
-//fontFamily = "";
+let x_attr = 'created_at'
+let y_attr = 'hot'
+
+
 d3.select("body")
     .style("font-family", fontFamily)
 
@@ -42,8 +46,7 @@ let chart2 = d3.select('#chart2')
     .attr('width', width)
     .attr('height', height)
 
-let chart3 = d3
-    .select("#chart3")
+let chart3 = d3.select("#chart3")
     .append("svg")
     .attr('width', width)
     .attr('height', height + 40)
@@ -256,7 +259,6 @@ function reset() {
         .call(axis_x)
         .attr('font-family', fontFamily)
         .attr('font-size', '0.4rem')
-    // chart2.selectAll('circle').remove()
     chart2.selectAll('circle')
         .transition()
         .duration(500)
@@ -272,7 +274,6 @@ function reset() {
             return x(d[x_attr])
         })
         .attr('cy', (d, i) => {
-            // console.log(hot)
             return y(calhot(d))
         })
         .attr('r', (d, i) => {
@@ -323,12 +324,12 @@ function highlightUser(user) {
     let htgs = []
     let min_x = Date.now();
     let max_x = new Date(1970, 1, 1);
+
     // 先确定横轴范围
     chart2.selectAll('circle')
         .filter(function (d, i) {
             if (d['username'] == user) {
                 for (ht in d['hashtags']) {
-                    // console.log(d['hashtags'])
                     if (d['hashtags'][ht] != 'vis2020') {
                         htgs.push(d['hashtags'][ht])
                         if (d[x_attr] < min_x)
@@ -341,7 +342,7 @@ function highlightUser(user) {
             }
             else return false
         })
-    // console.log([min_x, max_x])
+
     // 修改坐标轴
     x = d3.scaleTime()
         .domain([min_x, max_x])
@@ -357,6 +358,7 @@ function highlightUser(user) {
         .call(axis_x)
         .attr('font-family', fontFamily)
         .attr('font-size', '0.4rem')
+
     // 筛选出时间范围内的点
     chart2.selectAll('circle')
         .transition()
@@ -377,6 +379,7 @@ function highlightUser(user) {
             return y(calhot(d))
         })
         .attr('opacity', 0.2)
+
     // 修改透明度
     chart2.selectAll('circle')
         .filter(function (d, i) {
@@ -391,7 +394,7 @@ function highlightUser(user) {
             return 2 + Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
-    // console.log(htgs)
+
     chart1.selectAll("text")
         .transition()
         .duration(500)
@@ -412,12 +415,12 @@ function highlightUser(user) {
         .attr('opacity', 0.9)
 }
 
-let uuser = 'qpvnswruascbqjsx'
+let uuser = 'skipher' // 表示目前没有user被选中
 
 function selectUser(user) {
     reset()
-    if (user == uuser) {
-        uuser = 'qpvnswruascbqjsx'
+    if (user == uuser) { // 重新点击这个用户的头像可以取消筛选
+        uuser = 'skipher'
     }
     else {
         highlightUser(user)
@@ -536,8 +539,6 @@ function process_overlap(hashtag) {
 }
 
 function draw_hashtags(hashtags) {
-    //datahash = hashtags
-    //console.log(datahash)
     chart1.append("g")
         .selectAll("text")
         .data(hashtags)
@@ -554,6 +555,7 @@ function draw_hashtags(hashtags) {
         .on('click', function (d, i) {
             selectTag(i[0])
         })
+
     title.append('g')
         .attr('transform', `translate(${width / 2 - 100}, ${height / 10 + 10})`)
         .append('text')
@@ -561,34 +563,15 @@ function draw_hashtags(hashtags) {
         .attr("font-size", d => 18)
         .attr("stroke", '#CD5968')
         .attr("fill", '#CD5968')
-        .text('A Visualization for twitters about the VIS2020');
-    // .attr("opacity", 1)
-    // .attr("font-weight", 'bold')
+        .text('A Visualization for twitters about the VIS2020')
+
     title.append('image')
         .attr('xlink:href', "../data/icon.png")
         .attr('x', width0 * 0.95)
         .attr('y', 0)
         .attr('width', 40)
         .attr('weight', 40)
-    // chart1.append('image')
-    //     .attr('xlink:href',"../img/tags.jfif")
-    //     .attr('x', width * 0.021)
-    //     .attr('y', 10)
-    //     .attr('width', 180)
-    //     .attr('weight', 180)
-    // .selectAll('.images')
-    // .append('image')
-    // .attr("xlink:href", function(d){
-    //     return "../data/icon.png"
-    // })
-    // .attr('x', 0)
-    // .attr('y', 0)
-    // .attr('width', 100)
-    // .attr('weight', 100)
 }
-
-let x_attr = 'created_at'
-let y_attr = 'hot'
 
 /*
 function func(x) {
@@ -635,10 +618,9 @@ function get_y_min_max(data) {
     })
     return [min, max]
 }
-//
+
 function zoomed(event) {
     x = event.transform.rescaleX(x_t);
-    // console.log(typeof(x_t))
     update();
 }
 
@@ -666,7 +648,6 @@ function update() {
         .attr('class', 'point')
         .merge(points)
         .attr('cx', (d, i) => {
-            //console.log(d[x_attr])
             return x(d[x_attr]);
         })
         .attr('cy', (d, i) => y(calhot(d)))
@@ -684,16 +665,6 @@ function draw_chart2() {
 
     chart2.append('g')
         .attr('transform', `translate(${padding.left + (width - padding.left - padding.right) / 2}, ${padding.top})`)
-
-
-    // chart2.append('g')
-    //     .attr('transform', `translate(${width * 0.02}, ${height * 0.8})`)
-    //     .append('text')
-    //     .attr("font-family", 'roboto')
-    //     .attr("font-size", d => 180)
-    //     .attr("stroke", '#CD5968')
-    //     .attr("fill", '#CD5968')
-    //     .text('💬')
 
     x_t = d3.scaleTime()
         .domain(get_x_min_max(data, x_attr))
@@ -752,8 +723,6 @@ function draw_chart2() {
         .attr('r', (d, i) => {
             return 2 + Math.sqrt(calhot(d))
         })
-        //.style('fill', '#62A55E')
-        //.style('fill','	#1DA1F2')
         .style('fill', (d, i) => {
             let date1 = Date.parse("2020-04-20")
             let date2 = Date.parse("2020-07-08")
@@ -765,9 +734,7 @@ function draw_chart2() {
         })
         .attr('opacity', 0.7)
         .on('click', function (e, d) {
-            // selectUser(d['Username'])
             selectTweet(d['id'], d['username'], d['hashtags'])
-            ///console.log(d['id'],d['username'],d['hashtags'])
         })
         .on('mouseover', (e, d) => {
             let tweet = d['tweet'];
@@ -780,20 +747,16 @@ function draw_chart2() {
             let retweets = parseInt(d['retweets_count'])
             let likes = parseInt(d['likes_count'])
 
-            // console.log(time)
             let content = '<span style="font-size:0.8rem">' + name + '</span>' + '<br>'
                 + '<span style="font-size:0.3rem">' + time + '</span>'
                 + '<br>' + '<div style="font-size:0.6rem">' + tweet + '</div>'
                 + '<p align = "right" style="font-size:0.5rem">' + '👍 ' + likes + '    💬 ' + replies + '</p>'
-
-            //let str = d[x_attr]
 
             let tooltip = d3.select('#tooltip')
             tooltip.html(content)
                 .style('left', (width * 0.83) + 'px')
                 .style('top', (y(0) + 50) + 'px')
                 .style('visibility', 'visible')
-            // console.log('here')
         })
         .on('mouseout', (e, d) => {
             let tooltip = d3.select('#tooltip')
@@ -812,14 +775,7 @@ function draw_chart2() {
 function draw_chart3() {
 
     var num = 26
-    var xpos = []
-    // for (var i = 0; i < num; i++) {
-    //     // 随机生成50个点坐标
-    //     var tmp = Math.floor(Math.random() * 1000)
-    //     xpos.push(tmp)
-    // }
-    xpos = [723, 770, 117, 782, 80, 80, 807, 699, 740, 259, 650, 959, 504, 572, 589, 539, 955, 244, 482, 72, 505, 382, 51, 763, 943, 882]
-
+    var xpos = DATA_xpos
 
     let padding = { 'left': 0.2 * width, 'bottom': 0.1 * height, 'top': 0.05 * height, 'right': 0.1 * width }
     let x = d3.scaleLinear()
@@ -834,15 +790,6 @@ function draw_chart3() {
         .domain([2031, 65000])
         .range([15, 25])
 
-    // chart3.append('g')
-    //     .attr('transform', `translate(${width * 0.02}, ${height * 0.8})`)
-    //     .append('text')
-    //     .attr("font-family", 'roboto')
-    //     .attr("font-size", d => 180)
-    //     .attr("stroke", '#CD5968')
-    //     .attr("fill", '#CD5968')
-    //     .text('🧑‍💻')
-
     var images = chart3.selectAll(".images")
         .data(data2)
         .enter()
@@ -852,11 +799,8 @@ function draw_chart3() {
         return "../img/" + d["Username"] + ".jpg"
     })
         .attr('x', (d, i) => {
-            //console.log('data', d); 
             return x(parseInt(d["Time"]))
         })
-        //.style("opacity", 0.7)
-        //.attr('y', (d, i) => y(xpos[i]))
         .attr('y', function (d, i) {
             return y(xpos[parseInt(d["Index"]) - 1])
         })
@@ -865,22 +809,17 @@ function draw_chart3() {
         .style("opacity", 0.7)
         .on('click', function (e, d) {
             selectUser(d['Username'])
-            //console.log((xpos[parseInt(d["Index"])-1]))
         })
         .on('mouseover', (e, d) => {
             let name = d['Name']
 
             let content = '<span style="font-size:0.6rem">' + name + '</span>' + '<br>'
 
-            //let str = d[x_attr];
-
             let tooltip = d3.select('#tooltip1');
             tooltip.html(content)
                 .style('left', x(parseInt(d["Time"])) + 'px')
-                //.style('top',  y(xpos[parseInt(d["Index"])-1]) + 'px')
                 .style('top', y(xpos[parseInt(d["Index"]) - 1]) - 1.4 * height + 'px')
                 .style('visibility', 'visible');
-            //console.log(height)
         })
         .on('mouseout', (e, d) => {
             let tooltip = d3.select('#tooltip1');
@@ -982,12 +921,10 @@ d3.csv(data_file).then(function (DATA) {
     process_overlap(hashtags)
     draw_hashtags(hashtags)
     draw_chart2()
-    //draw_chart3();
     draw_chart4()
 })
 
 d3.csv("../data/Follow.csv").then(function (DATA) {
     data2 = DATA.filter((d, i) => d["Time"] > 0)
-    //console.log(data);
     draw_chart3()
 })
