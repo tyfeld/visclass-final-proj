@@ -14,7 +14,7 @@
 
 ## 项目设计与展示
 
-![overview.png](.\readme_img\overview.png)
+![overview.png](https://github.com/tyfeld/visclass-final-proj/blob/master/readme_img/overview.png)
 
 ### 主体描述
 
@@ -34,17 +34,17 @@
 
 1. 点击第一部分的某个标签，在图二会高亮带有该标签的所有推特，图三会高亮关注这个标签的所有用户，如下图
 
-   ![hightlightTag.png](./readme_img/hightlightTag.gif)
+   ![hightlightTag.png](https://github.com/tyfeld/visclass-final-proj/blob/master/readme_img/hightlightTag.gif)
 
    可以看到sustainability这个标签对应了图二中高亮部分的推特，在图三中，有三名用户对这个标签感兴趣。图二对推特的时间做了缩放操作，使得推特能够在横轴上均匀分布。
 
 2. 点击第二部分的某个点，在图一中会高亮与这条推特有关的标签，图三会高亮发出这条推特的用户
 
-   ![image-20210124234746896](.\readme_img\hightlightTwitt.gif)
+   ![image-20210124234746896](https://github.com/tyfeld/visclass-final-proj/blob/master/readme_img/hightlightTwitt.gif)
 
 3. 点击第三部分的某个用户头像，在图一中会显示该用户关心的话题标签，图二中显示该用户发出的所有推特
 
-   ![hightlightUser](.\readme_img\hightlightUser.gif)
+   ![hightlightUser](https://github.com/tyfeld/visclass-final-proj/blob/master/readme_img/hightlightUser.gif)
 
 ## 可视化结果分析
 
