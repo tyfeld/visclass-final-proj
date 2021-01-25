@@ -558,7 +558,10 @@ function draw_hashtags(hashtags) {
         .data(hashtags)
         .join("text")
         .text(d => ('🏷️' + d[0]))
-        .attr("x", d => d[2])
+        .attr("x", function(d){
+            if (d[0] == 'islandlife') return d[2] + height0 / 10
+            else return d[2]
+        })
         .attr("y", d => d[3])
         .attr("font-family", 'roboto')
         .attr("font-size", d => 18 - (d[3] - 50) / 30)
