@@ -1,4 +1,4 @@
-// test-push
+// initialize data 
 let _width = $(window).width()
 let _height = $(window).height()
 let width0 = 0.98 * _width
@@ -28,6 +28,7 @@ let x_attr = 'created_at'
 let y_attr = 'hot'
 
 
+// select chart 1, 2, 3, 4
 d3.select("body")
     .style("font-family", fontFamily)
 
@@ -57,6 +58,8 @@ let chart4 = d3.select('#chart4')
     .attr('height', height)
     .attr('overflow', 'visible')
 
+
+// click tag to highlight
 let ttag = 'null'
 
 function highlightTag(tag) {
@@ -140,6 +143,7 @@ function highlightTag(tag) {
             return 2 + Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
+
     let z = d3.scaleLinear()
         .domain([2031, 65000])
         .range([15, 25])
@@ -165,7 +169,19 @@ function highlightTag(tag) {
         .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
 }
 
+function selectTag(tag) {
+    reset()
+    if (tag == ttag) {
+        ttag = 'null'
+    }
+    else {
+        highlightTag(tag)
+        ttag = tag
+    }
+}
 
+
+// click tweet to highlight
 function highlightTweet(id, usn, htgs) {
     chart1.selectAll("text")
         .transition()
@@ -187,6 +203,7 @@ function highlightTweet(id, usn, htgs) {
         .duration(500)
         .attr("font-size", d => (18 - (d[3] - 50) / 30) * 1.5)
         .attr('opacity', 0.9)
+        
     chart2.selectAll('circle')
         .transition()
         .duration(500)
@@ -209,6 +226,7 @@ function highlightTweet(id, usn, htgs) {
             return 2 + Math.sqrt(calhot(d) * 3)
         })
         .attr('opacity', 0.9)
+
     let z = d3.scaleLinear()
         .domain([2031, 65000])
         .range([15, 25])
@@ -228,7 +246,6 @@ function highlightTweet(id, usn, htgs) {
         .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
 }
 
-
 function selectTweet(id, usn, htgs) {
     reset()
     if (id == iid) {
@@ -239,70 +256,9 @@ function selectTweet(id, usn, htgs) {
         iid = id
     }
 }
-function reset() {
-    chart1.selectAll("text")
-        .transition()
-        .duration(500)
-        .attr("font-size", d => 18 - (d[3] - 50) / 30)
-        .attr('opacity', 0.7)
-    x = d3.scaleTime()
-        .domain(get_x_min_max(data, x_attr))
-        .range([padding.left, width - padding.right])
-    let axis_x = d3.axisBottom()
-        .scale(x)
-        .ticks(10)
-        .tickFormat(d3.timeFormat('%m-%d'))
-    chart2.select('.x_axis').remove()
-    chart2.append('g')
-        .attr('class', 'x_axis')
-        .attr('transform', `translate(${0}, ${height - padding.bottom})`)
-        .call(axis_x)
-        .attr('font-family', fontFamily)
-        .attr('font-size', '0.4rem')
-    chart2.selectAll('circle')
-        .transition()
-        .duration(500)
-        .style('visibility', (d, i) => {
-            let x_p = x(d[x_attr])
-            if (x_p < padding.left || x_p > (width - padding.right))
-                return 'hidden'
-            else return 'visible'
-        })
-        .attr('class', 'point')
-        .attr('visibility', 'visible')
-        .attr('cx', (d, i) => {
-            return x(d[x_attr])
-        })
-        .attr('cy', (d, i) => {
-            return y(calhot(d))
-        })
-        .attr('r', (d, i) => {
-            return 2 + Math.sqrt(calhot(d))
-        })
-        .attr('opacity', 0.7)
 
-    let z = d3.scaleLinear()
-        .domain([2031, 65000])
-        .range([15, 25])
-    chart3.selectAll('image')
-        .transition()
-        .duration(500)
-        .style("opacity", 0.7)
-        .attr('width', (d, i) => 2 * z(parseInt(d["Followers"])))
-        .attr('height', (d, i) => 2 * z(parseInt(d["Followers"])))
-}
 
-function selectTag(tag) {
-    reset()
-    if (tag == ttag) {
-        ttag = 'null'
-    }
-    else {
-        highlightTag(tag)
-        ttag = tag
-    }
-}
-
+// click user to highlight
 function highlightUser(user) {
     let z = d3.scaleLinear()
         .domain([2031, 65000])
@@ -428,6 +384,62 @@ function selectUser(user) {
     }
 }
 
+
+// remove selection
+function reset() {
+    chart1.selectAll("text")
+        .transition()
+        .duration(500)
+        .attr("font-size", d => 18 - (d[3] - 50) / 30)
+        .attr('opacity', 0.7)
+
+    x = d3.scaleTime()
+        .domain(get_x_min_max(data, x_attr))
+        .range([padding.left, width - padding.right])
+    let axis_x = d3.axisBottom()
+        .scale(x)
+        .ticks(10)
+        .tickFormat(d3.timeFormat('%m-%d'))
+    chart2.select('.x_axis').remove()
+    chart2.append('g')
+        .attr('class', 'x_axis')
+        .attr('transform', `translate(${0}, ${height - padding.bottom})`)
+        .call(axis_x)
+        .attr('font-family', fontFamily)
+        .attr('font-size', '0.4rem')
+    chart2.selectAll('circle')
+        .transition()
+        .duration(500)
+        .style('visibility', (d, i) => {
+            let x_p = x(d[x_attr])
+            if (x_p < padding.left || x_p > (width - padding.right))
+                return 'hidden'
+            else return 'visible'
+        })
+        .attr('class', 'point')
+        .attr('visibility', 'visible')
+        .attr('cx', (d, i) => {
+            return x(d[x_attr])
+        })
+        .attr('cy', (d, i) => {
+            return y(calhot(d))
+        })
+        .attr('r', (d, i) => {
+            return 2 + Math.sqrt(calhot(d))
+        })
+        .attr('opacity', 0.7)
+
+    let z = d3.scaleLinear()
+        .domain([2031, 65000])
+        .range([15, 25])
+    chart3.selectAll('image')
+        .transition()
+        .duration(500)
+        .style("opacity", 0.7)
+        .attr('width', (d, i) => 2 * z(parseInt(d["Followers"])))
+        .attr('height', (d, i) => 2 * z(parseInt(d["Followers"])))
+}
+
 // transform type of data['hashtags'] from string ro array of string
 // transform type of data['created_at'] from string to date
 function process(data) {
@@ -538,6 +550,8 @@ function process_overlap(hashtag) {
     }
 }
 
+
+// tag chart
 function draw_hashtags(hashtags) {
     chart1.append("g")
         .selectAll("text")
@@ -573,21 +587,8 @@ function draw_hashtags(hashtags) {
         .attr('weight', 40)
 }
 
-/*
-function func(x) {
-    x = 60000000 - (60000000 - x) / 2
-    return x / 3 / 60000000 * x / 60000000 * x + 40000000
-}
 
-function get_time(str) {
-    let time = ((((parseInt(str.slice(2, 4)) * 12 + parseInt(str.slice(5, 7))) * 31 + parseInt(str.slice(8, 10))) * 24 + parseInt(str.slice(11, 13))) * 60 +
-        parseInt(str.slice(14, 16))) * 60 + parseInt(str.slice(17, 19)) - 600000000
-    if (time < -100000000) return time
-    if (time < 60000000) return func(time)
-    return time
-}
-*/
-
+// get range
 function get_x_min_max(data, attr) {
     let min = Date.now()
     let max = new Date(1970, 1, 1)
@@ -601,13 +602,6 @@ function get_x_min_max(data, attr) {
     return [min, max]
 }
 
-function calhot(d) {
-    let replies = parseInt(d['replies_count'])
-    let retweets = parseInt(d['retweets_count'])
-    let likes = parseInt(d['likes_count'])
-    return replies + retweets + likes * 0.3
-}
-
 function get_y_min_max(data) {
     let min = 1e9
     let max = 0
@@ -619,6 +613,18 @@ function get_y_min_max(data) {
     return [min, max]
 }
 
+
+// hot = replies + retweets + likes * 0.3
+function calhot(d) {
+    let replies = parseInt(d['replies_count'])
+    let retweets = parseInt(d['retweets_count'])
+    let likes = parseInt(d['likes_count'])
+    return replies + retweets + likes * 0.3
+}
+
+
+
+// zoom function
 function zoomed(event) {
     x = event.transform.rescaleX(x_t);
     update();
@@ -660,6 +666,8 @@ function update() {
     points.exit().remove();
 }
 
+
+// tweet chart
 function draw_chart2() {
     padding = { 'left': 0.2 * width, 'bottom': 0.1 * height, 'top': 0.05 * height, 'right': 0.2 * width }
 
@@ -769,9 +777,11 @@ function draw_chart2() {
         .translateExtent(extent)
         .extent(extent)
         .on('zoom', zoomed));
-
 }
 
+
+
+// user chart
 function draw_chart3() {
 
     var num = 26
@@ -828,6 +838,9 @@ function draw_chart3() {
 
 }
 
+
+
+// meeting line chart
 function draw_chart4() {
     let x0 = padding.left * 0.45
     let y0 = - 0.9 * _height
@@ -912,6 +925,8 @@ function draw_chart4() {
         .text(d => d[2])
 }
 
+
+// main
 d3.csv(data_file).then(function (DATA) {
     data = DATA
     process(data)
