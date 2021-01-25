@@ -13,9 +13,16 @@ if (/\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)) {
     fontFamily = "PingFangSC-Regular"
 }
 
+let  meeting_text=[[0, 0, "2020-04-20"], [0, 1, "Paper"], [0, 2, "submission"], [0, 3, "deadline"],
+[1, 0, "2020-07-08"], [1, 1, "Author"], [1, 2, "notification"], [1, 3, "deadline"],
+[2, 0, "2020-10-25"], [2, 1, "VIS2020"], [2, 2, "Conference"],
+[3, 0, "2020-10-30"]]
 let Cz = 2 * height0 / 1000
 let DATA_xpos = [723, 770, 117, 782, 80, 80, 807, 699, 740, 259, 650, 959, 504, 572, 589, 539, 955, 244, 482, 72, 505, 382, 51, 763, 943, 882]
 let username_y = 0.7
+let tag_opacity = [0.3, 0.7, 0.9]
+let tweet_opacity = [0.2, 0.7, 0.9]
+let user_opacity = [0.3, 0.7, 0.9]
 
 let datahash = {}
 let iid = 0
@@ -68,13 +75,13 @@ function highlightTag(tag) {
         .transition()
         .duration(500)
         .attr("font-size", d => 18 - (d[3] - 50) / 30)
-        .attr('opacity', 0.3)
+        .attr('opacity', tag_opacity[0])
     chart1.selectAll("text")
         .filter(d => d[0] == tag)
         .transition()
         .duration(500)
         .attr("font-size", d => (18 - (d[3] - 50) / 30) * 1.5)
-        .attr('opacity', 0.9)
+        .attr('opacity', tag_opacity[2])
 
     users = []
     let min_x = Date.now();
@@ -125,7 +132,7 @@ function highlightTag(tag) {
         .attr('cy', (d, i) => {
             return y(calhot(d))
         })
-        .attr('opacity', 0.2)
+        .attr('opacity', tweet_opacity[0])
     // 更改透明度
     chart2.selectAll('circle')
         .filter(function (d, i) {
@@ -143,7 +150,7 @@ function highlightTag(tag) {
         .attr('r', (d, i) => {
             return 2 + Math.sqrt(calhot(d) * 3)
         })
-        .attr('opacity', 0.9)
+        .attr('opacity', tweet_opacity[2])
 
     let z = d3.scaleLinear()
         .domain([2031, 65000])
@@ -151,7 +158,7 @@ function highlightTag(tag) {
     chart3.selectAll("image")
         .transition()
         .duration(500)
-        .style("opacity", 0.3)
+        .style("opacity", user_opacity[0])
         .attr('width', (d, i) => z(parseInt(d["Followers"])))
         .attr('height', (d, i) => z(parseInt(d["Followers"])))
         .attr('visible', 'hidden')
@@ -165,7 +172,7 @@ function highlightTag(tag) {
         })
         .transition()
         .duration(500)
-        .style("opacity", 0.9)
+        .style("opacity", user_opacity[2])
         .attr('width', (d, i) => z(parseInt(d["Followers"])) * 3)
         .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
 }
@@ -188,7 +195,7 @@ function highlightTweet(id, usn, htgs) {
         .transition()
         .duration(500)
         .attr("font-size", d => 18 - (d[3] - 50) / 30)
-        .attr('opacity', 0.3)
+        .attr('opacity', tag_opacity[0])
     chart1.selectAll("text")
         .filter(function (d, i) {
             for (ht in htgs) {
@@ -203,7 +210,7 @@ function highlightTweet(id, usn, htgs) {
         .transition()
         .duration(500)
         .attr("font-size", d => (18 - (d[3] - 50) / 30) * 1.5)
-        .attr('opacity', 0.9)
+        .attr('opacity', tag_opacity[2])
         
     chart2.selectAll('circle')
         .transition()
@@ -211,22 +218,15 @@ function highlightTweet(id, usn, htgs) {
         .attr('r', (d, i) => {
             return Math.sqrt(calhot(d) / 2)
         })
-        .attr('opacity', 0.2)
+        .attr('opacity', tweet_opacity[0])
     chart2.selectAll('circle')
-        // .filter(function(d, i){
-        //     ddd = d['hashtags']
-        //     for (dd in ddd){
-        //         if (ddd[dd] == tag) return true
-        //     }
-        //     return false
-        // })
         .filter(d => d['id'] == id)
         .transition()
         .duration(500)
         .attr('r', (d, i) => {
             return 2 + Math.sqrt(calhot(d) * 3)
         })
-        .attr('opacity', 0.9)
+        .attr('opacity', tweet_opacity[2])
 
     let z = d3.scaleLinear()
         .domain([2031, 65000])
@@ -234,7 +234,7 @@ function highlightTweet(id, usn, htgs) {
     chart3.selectAll("image")
         .transition()
         .duration(500)
-        .style("opacity", 0.3)
+        .style("opacity", user_opacity[0])
         .attr('width', (d, i) => z(parseInt(d["Followers"])))
         .attr('height', (d, i) => z(parseInt(d["Followers"])))
         .attr('visible', 'hidden')
@@ -242,7 +242,7 @@ function highlightTweet(id, usn, htgs) {
         .filter((d, i) => d["Username"] == usn)
         .transition()
         .duration(500)
-        .style("opacity", 0.9)
+        .style("opacity", user_opacity[2])
         .attr('width', (d, i) => z(parseInt(d["Followers"])) * 3)
         .attr('height', (d, i) => z(parseInt(d["Followers"])) * 3)
 }
@@ -267,14 +267,14 @@ function highlightUser(user) {
     chart3.selectAll("image")
         .transition()
         .duration(500)
-        .style("opacity", 0.3)
+        .style("opacity", user_opacity[0])
         .attr('width', (d, i) => z(parseInt(d["Followers"])))
         .attr('height', (d, i) => z(parseInt(d["Followers"])))
     chart3.selectAll("image")
         .filter((d, i) => d["Username"] == user)
         .transition()
         .duration(500)
-        .style("opacity", 0.9)
+        .style("opacity", user_opacity[2])
         .attr('width', (d, i) => 3 * z(parseInt(d["Followers"])))
         .attr('height', (d, i) => 3 * z(parseInt(d["Followers"])))
 
@@ -335,7 +335,7 @@ function highlightUser(user) {
         .attr('cy', (d, i) => {
             return y(calhot(d))
         })
-        .attr('opacity', 0.2)
+        .attr('opacity', tweet_opacity[0])
 
     // 修改透明度
     chart2.selectAll('circle')
@@ -350,13 +350,13 @@ function highlightUser(user) {
         .attr('r', (d, i) => {
             return 2 + Math.sqrt(calhot(d) * 3)
         })
-        .attr('opacity', 0.9)
+        .attr('opacity', tweet_opacity[2])
 
     chart1.selectAll("text")
         .transition()
         .duration(500)
         .attr("font-size", d => 18 - (d[3] - 50) / 30)
-        .attr('opacity', 0.3)
+        .attr('opacity', tag_opacity[0])
     chart1.selectAll("text")
         .filter(function (d, i) {
             for (ht in htgs) {
@@ -369,7 +369,7 @@ function highlightUser(user) {
         .transition()
         .duration(500)
         .attr("font-size", d => (18 - (d[3] - 50) / 30) * 1.5)
-        .attr('opacity', 0.9)
+        .attr('opacity', tag_opacity[2])
 }
 
 let uuser = 'skipher' // 表示目前没有user被选中
@@ -392,7 +392,7 @@ function reset() {
         .transition()
         .duration(500)
         .attr("font-size", d => 18 - (d[3] - 50) / 30)
-        .attr('opacity', 0.7)
+        .attr('opacity', tag_opacity[1])
 
     x = d3.scaleTime()
         .domain(get_x_min_max(data, x_attr))
@@ -428,7 +428,7 @@ function reset() {
         .attr('r', (d, i) => {
             return 2 + Math.sqrt(calhot(d))
         })
-        .attr('opacity', 0.7)
+        .attr('opacity', tweet_opacity[1])
 
     let z = d3.scaleLinear()
         .domain([2031, 65000])
@@ -436,7 +436,7 @@ function reset() {
     chart3.selectAll('image')
         .transition()
         .duration(500)
-        .style("opacity", 0.7)
+        .style("opacity", user_opacity[1])
         .attr('width', (d, i) => 2 * z(parseInt(d["Followers"])))
         .attr('height', (d, i) => 2 * z(parseInt(d["Followers"])))
 }
@@ -569,7 +569,7 @@ function draw_hashtags(hashtags) {
         .attr("stroke", '#CD5968')
         .attr("fill", '#CD5968')
         .attr("cursor", 'pointer')
-        .attr('opacity', 0.7)
+        .attr('opacity', tag_opacity[1])
         .on('click', function (d, i) {
             selectTag(i[0])
         })
@@ -744,7 +744,7 @@ function draw_chart2() {
             if (date < date1 || (date > date2 && date < date3) || (date > date4)) return "#377eb8"
             else return "#4daf4a"
         })
-        .attr('opacity', 0.7)
+        .attr('opacity', tweet_opacity[1])
         .on('click', function (e, d) {
             selectTweet(d['id'], d['username'], d['hashtags'])
         })
@@ -820,7 +820,7 @@ function draw_chart3() {
         })
         .attr("width", (d, i) => 2 * z(parseInt(d["Followers"])))
         .attr("height", (d, i) => 2 * z(parseInt(d["Followers"])))
-        .style("opacity", 0.7)
+        .style("opacity", user_opacity[1])
         .on('click', function (e, d) {
             selectUser(d['Username'])
         })
@@ -864,10 +864,7 @@ function draw_chart4() {
     }
     let hor_lines = [1, 2, 3, 4]
     let hor_length = padding.left * 0.3
-    let text = [[0, 0, "2020-04-20"], [0, 1, "Paper"], [0, 2, "submission"], [0, 3, "deadline"],
-    [1, 0, "2020-07-08"], [1, 1, "Author"], [1, 2, "notification"], [1, 3, "deadline"],
-    [2, 0, "2020-10-25"], [2, 1, "VIS2020"], [2, 2, "Conference"],
-    [3, 0, "2020-10-30"]]
+    let text = meeting_text
 
     chart4.append('g')
         .selectAll('circle')
