@@ -831,7 +831,7 @@ function draw_chart3() {
             let tooltip = d3.select('#tooltip1');
             tooltip.html(content)
                 .style('left', x(parseInt(d["Time"])) + 'px')
-                .style('top', y(xpos[parseInt(d["Index"]) - 1]) - 1.4 * height + 'px')
+                .style('top', y(xpos[parseInt(d["Index"]) - 1]) - 0.68 * height0 + 'px')
                 .style('visibility', 'visible');
         })
         .on('mouseout', (e, d) => {
