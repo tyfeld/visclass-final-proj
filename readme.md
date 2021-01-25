@@ -14,7 +14,7 @@
 
 ## 项目设计与展示
 
-![Image text](https://raw.github.com/tyfeld/visclass-final-proj/blob/master/readme_img/overview.png)
+![overview.png](/readme_img/overview.png)
 
 ### 主体描述
 
