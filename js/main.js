@@ -780,7 +780,8 @@ function draw_chart2() {
         .scaleExtent([1, 7])
         .translateExtent(extent)
         .extent(extent)
-        .on('zoom', zoomed));
+        .on('zoom', zoomed))
+        .on("dblclick.zoom", null);
 }
 
 
